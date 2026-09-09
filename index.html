@@ -100,7 +100,7 @@ nav#chapters{
    directions and two frames share the window mid-travel. */
 .nav-floral{
   flex:none;height:clamp(130px,22vh,230px);margin:0 0 20px;
-  position:relative;overflow:hidden;background:var(--grey-10)
+  position:relative;overflow:hidden;background:var(--paper)
 }
 .nav-strip{position:absolute;top:0;left:0;right:0;will-change:transform}
 .nav-strip span{
@@ -1270,6 +1270,9 @@ function initNavMedia(){
   const frames = SHOTS.map(s=>s.src);
   const strip = document.createElement("div");
   strip.className = "nav-strip";
+  /* an empty slot leads the strip, so the window stays blank while the cover
+     is still on screen and the first shot rides up into it */
+  strip.appendChild(document.createElement("span"));
   frames.forEach(name=>{
     const el = document.createElement("span");
     el.style.backgroundImage = `url("assets/img/${name}.webp")`;
@@ -1279,6 +1282,7 @@ function initNavMedia(){
 
   if(window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
+  const hero = document.getElementById("hero");
   let ticking = false;
   function paint(){
     ticking = false;
@@ -1286,9 +1290,21 @@ function initNavMedia(){
        one full frame per step and never shows a seam */
     const win = box.clientHeight;
     strip.style.setProperty("--win", win + "px");
+    const y = window.scrollY;
     const max = document.documentElement.scrollHeight - window.innerHeight;
-    const p = max > 0 ? Math.min(Math.max(window.scrollY / max, 0), 1) : 0;
-    strip.style.transform = `translateY(${-(p * (frames.length - 1) * win).toFixed(1)}px)`;
+    const coverH = hero ? hero.offsetHeight : 0;
+
+    /* pos is measured in frames. The first step is tied to the cover scrolling
+       away, so the empty slot gives way to the first shot exactly as the cover
+       leaves; the remaining frames share the rest of the page. */
+    let pos;
+    if(y < coverH){
+      pos = coverH > 0 ? y / coverH : 0;
+    } else {
+      const rest = max - coverH;
+      pos = 1 + (rest > 0 ? Math.min((y - coverH) / rest, 1) : 0) * (frames.length - 1);
+    }
+    strip.style.transform = `translateY(${-(pos * win).toFixed(1)}px)`;
   }
   window.addEventListener("scroll",()=>{
     if(!ticking){ ticking = true; requestAnimationFrame(paint); }
