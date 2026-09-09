@@ -378,6 +378,15 @@ section{padding:clamp(64px,9vh,110px) var(--pad);border-bottom:1px solid var(--g
 .close-list{list-style:none;margin:18px 0 0;padding:0}
 .close-list li{font-size:15px;line-height:1.9;color:rgba(255,255,255,.82)}
 
+/* ─── CONTACT ──────────────────────────────────────── */
+.contact-block .btn{text-decoration:none}
+.contact-mail{
+  display:block;margin-top:26px;font-size:13px;letter-spacing:.08em;
+  color:var(--grey-45);text-decoration:none;border-bottom:1px solid transparent;
+  width:fit-content;transition:color .25s var(--ease),border-color .25s var(--ease)
+}
+.contact-mail:hover{color:var(--ink);border-bottom-color:var(--ink)}
+
 /* ─── LIGHTBOX ─────────────────────────────────────── */
 #lb{
   position:fixed;inset:0;z-index:180;background:rgba(13,13,13,.96);
@@ -753,6 +762,17 @@ footer .f-r{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:v
           <p>Explore accessories and selected components. 3D printing may support form studies and prototypes, subject to material, finish and production validation.</p>
         </div>
       </div>
+    </div>
+  </section>
+
+  <!-- 10 CONTACT -->
+  <section id="contact" data-nav="Contact">
+    <div class="reveal contact-block">
+      <div class="eyebrow">Next step</div>
+      <h2 class="sec-title">Let's talk<br>about MAD</h2>
+      <p class="sec-sub">Questions on the collection, the plan or the timing: write to us and we will come back to you.</p>
+      <a class="btn solid" href="mailto:contact@lumenfashionconsulting.com?subject=LUMEN%20%C3%97%20MAD%20%E2%80%94%20From%20Vision%20to%20Market">Contact us →</a>
+      <a class="contact-mail" href="mailto:contact@lumenfashionconsulting.com">contact@lumenfashionconsulting.com</a>
     </div>
   </section>
 
