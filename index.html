@@ -118,6 +118,10 @@ main{margin-left:var(--nav-w)}
 section{padding:clamp(64px,9vh,110px) var(--pad);border-bottom:1px solid var(--grey-20);position:relative}
 .eyebrow{font-size:10px;letter-spacing:.22em;font-weight:700;text-transform:uppercase;color:var(--grey-45);margin-bottom:22px}
 .sec-title{font-size:clamp(30px,5.2vw,60px);line-height:1.02;margin-bottom:14px;max-width:22ch}
+/* headline held on a single line: the type scales with the viewport
+   instead of wrapping */
+.one-line{max-width:none;white-space:nowrap}
+.sec-title.one-line{font-size:clamp(19px,4.4vw,60px)}
 .sec-sub{font-size:clamp(15px,1.6vw,19px);color:var(--grey-60);max-width:62ch;margin-bottom:34px}
 .rule{height:1px;background:var(--rule);margin-bottom:44px}
 
@@ -140,7 +144,7 @@ section{padding:clamp(64px,9vh,110px) var(--pad);border-bottom:1px solid var(--g
 .hero-lockup{display:flex;align-items:center;gap:22px;margin-bottom:26px;flex-wrap:wrap}
 .hero-lockup img{height:clamp(44px,6vw,72px);width:auto}
 .hero-lockup .x{font-size:clamp(30px,4.4vw,52px);font-weight:700;letter-spacing:-.02em}
-.hero-copy h1{font-size:clamp(32px,6.6vw,80px);line-height:1;margin-bottom:16px}
+.hero-copy h1{font-size:clamp(21px,5.6vw,80px);line-height:1;margin-bottom:16px}
 .hero-copy .lead{font-size:clamp(15px,1.8vw,21px);color:var(--grey-60);margin-bottom:36px}
 .hero-actions{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
 .btn{
@@ -504,7 +508,7 @@ footer .f-r{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:v
         <span class="x">×</span>
         <span class="x">MAD</span>
       </div>
-      <h1>From Vision<br>to Market</h1>
+      <h1 class="one-line">From Vision to Market</h1>
       <p class="lead">An integrated brand development &amp; execution journey</p>
       <div class="hero-actions">
         <button class="btn solid" data-goto="vision">Begin →</button>
@@ -553,7 +557,7 @@ footer .f-r{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:v
   <section id="references" data-nav="References">
     <div class="reveal">
       <div class="eyebrow">Creative exploration</div>
-      <h2 class="sec-title">The references you shared</h2>
+      <h2 class="sec-title one-line">The references you shared</h2>
       <p class="sec-sub">Different qualities to interpret through MAD's own point of view</p>
       <div class="rule"></div>
     </div>
@@ -866,7 +870,7 @@ const TERRITORIES = [
      {src:"arch-stepped-layers",  cap:"Architectural print and stepped layers"}
    ]},
   {id:"abaya", label:"Abaya editions", title:"Abaya editions",
-   sub:"An airy contemporary outer layer connected to the MAD creative world — print, frame, colour and air",
+   sub:"An airy contemporary outer layer connected to the MAD creative world: print, frame, colour and air",
    shots:[
      {src:"abaya-flower-veil",   cap:"Flower Veil"},
      {src:"abaya-soft-frame",    cap:"Soft Frame"},
@@ -874,7 +878,7 @@ const TERRITORIES = [
      {src:"abaya-air-layers",    cap:"Air Layers"}
    ]},
   {id:"afterglow", label:"Afterglow", title:"Afterglow / A festive possibility",
-   sub:"The same creative markers, with carefully placed sparkle — crystal edging, selective floral sequin embroidery and a sculptural jewel holding a drape",
+   sub:"The same creative markers, with carefully placed sparkle: crystal edging, selective floral sequin embroidery and a sculptural jewel holding a drape",
    shots:[
      {src:"afterglow-festive", cap:"A festive interpretation of the same wardrobe"}
    ]}
@@ -915,7 +919,7 @@ const STEPS = [
  {ph:2,n:"05",t:"Refinement & production",s:"Fittings, approvals and manufacturing",
   title:"Refinement & production",
   lead:"Hands-on coordination through the decisions that make the product ready to manufacture",
-  cols:[{h:"The production sequence",items:["<strong>Review</strong> — fit and finish, technical feedback","<strong>Refine</strong> — document corrections, review revised samples","<strong>Approve</strong> — confirm specifications, approve final sample","<strong>Produce</strong> — quality, cost and timing, prepare delivery"]},
+  cols:[{h:"The production sequence",items:["<strong>Review</strong>: fit and finish, technical feedback","<strong>Refine</strong>: document corrections, review revised samples","<strong>Approve</strong>: confirm specifications, approve final sample","<strong>Produce</strong>: quality, cost and timing, prepare delivery"]},
         {h:"LUMEN's operational role",items:["Coordinate fittings, suppliers and corrective actions","Review costing, priorities and production milestones","Keep approved references and revisions together","Use AI to structure feedback for human review"]}]},
 
  {ph:2,n:"06",t:"Digital & content",s:"Store experience and launch assets",
@@ -947,28 +951,28 @@ const BIOS = {
     eyebrow:"Strategy & product",
     name:"Aïssata Malhaire",
     role:"Lead consultant",
-    org:"LUMEN — strategy, product, sourcing and production",
+    org:"LUMEN, strategy, product, sourcing and production",
     photo:"portrait-aissata.jpg",
     linkedin:"https://www.linkedin.com/in/aissata-malhaire/",
     tags:["Brand & business strategy","Collection architecture","Sourcing & production","Market access"],
     body:[
       "Aïssata leads LUMEN, the strategic and operational core of the MAD partnership. Her work covers the full arc a fashion brand has to cross in order to exist commercially: positioning and business model, collection architecture and product direction, development and sourcing, production and operations, then market access and growth.",
-      "On MAD she works as lead consultant and operational co-pilot — translating Madawi's creative vision into a focused, commercially grounded first offer, setting the price architecture and target costing, and coordinating the technical partners and suppliers who make the collection manufacturable.",
-      "Alongside brand work, she supports businesses and institutions — manufacturers, federations, incubators and schools — accompanying emerging labels through the same sequence, from first collection to market."
+      "On MAD she works as lead consultant and operational co-pilot, translating Madawi's creative vision into a focused, commercially grounded first offer, setting the price architecture and target costing, and coordinating the technical partners and suppliers who make the collection manufacturable.",
+      "Alongside brand work, she supports businesses and institutions such as manufacturers, federations, incubators and schools, accompanying emerging labels through the same sequence, from first collection to market."
     ]
   },
   alberto:{
     eyebrow:"Creative & digital",
     name:"Alberto Maccari",
     role:"Creative Director",
-    org:"White Rabbit Hole — AI-driven creative studio, Brussels",
+    org:"White Rabbit Hole, AI-driven creative studio, Brussels",
     photo:"portrait-alberto.jpg",
     linkedin:"https://www.linkedin.com/in/albertomaccari/",
     tags:["Fashion communication","Creative direction","Advertising","Brand identity","AI-assisted content"],
     body:[
-      "Fashion communication is where Alberto comes from. Across more than twenty years shaping brand narratives in Europe, he has built campaigns, brand books and editorial imagery for fashion and lifestyle names — his work for <strong>Triumph</strong> won a Fedrigoni Award in 2013 — and he has stayed close to the craft of the image through his own photographic practice, including the <em>Girls of Milan</em> photobook. Styling, casting, light and composition: the things that decide whether a collection reads as desirable or merely well made.",
-      "That grounding became creative direction on the agency side: identity systems, art direction and campaign work across Europe, always with the same concern — holding one visual idea together across a lookbook, a shop window, a product page and a feed.",
-      "Today he leads White Rabbit Hole, the Brussels studio behind MAD's brand expression, content and digital experience, where that craft is extended by new technology. The studio builds AI-assisted creative and product workflows: visual research and the comparison of directions, campaign concepting, content variations across channels, and product imagery built around accurate references of the approved garments. The tools accelerate exploration; the creative decisions stay with Madawi. He also runs targeted AI workshops, so the team keeps the capability in-house after launch."
+      "Alberto has worked in fashion communication for over twenty years: campaigns, brand books and editorial imagery for fashion and lifestyle brands. His work for <strong>Triumph</strong> received a Fedrigoni Award in 2013. He also keeps his own photographic practice, including the photobook <em>Girls of Milan</em>.",
+      "On the agency side he works as creative director: identity systems, art direction and campaigns, with particular attention to keeping one visual idea consistent across a lookbook, a product page and a feed.",
+      "He leads White Rabbit Hole in Brussels, which handles MAD's brand expression, content and digital experience. The studio builds AI-assisted creative and product workflows: visual research, campaign concepts, content variations across channels, and product imagery based on accurate references of the approved garments. The creative decisions stay with Madawi. He also runs AI workshops, so the team can handle day-to-day content in-house after launch."
     ]
   }
 };
