@@ -94,13 +94,10 @@ nav#chapters{
 .nav-item.active::before{
   content:"";position:absolute;left:0;top:8px;bottom:8px;width:3px;background:var(--accent)
 }
-/* a swatch of the collection's floral print closing the sidebar,
-   faded into the paper so it reads as a texture rather than a photo */
+/* the cover image closing the sidebar */
 .nav-floral{
-  flex:none;height:clamp(120px,20vh,210px);margin:0 0 20px;
-  background:url("assets/img/nav-floral.webp") center 30%/cover no-repeat;
-  -webkit-mask-image:linear-gradient(to bottom,transparent,#000 42%,#000 100%);
-          mask-image:linear-gradient(to bottom,transparent,#000 42%,#000 100%);
+  flex:none;height:clamp(130px,22vh,230px);margin:0 0 20px;
+  background:url("assets/img/hero-cover.webp") 62% center/cover no-repeat;
 }
 .nav-foot{padding:20px 28px 0;border-top:1px solid var(--grey-20);font-size:10px;letter-spacing:.12em;color:var(--grey-45);text-transform:uppercase;line-height:1.7}
 .nav-toggle{display:none}
