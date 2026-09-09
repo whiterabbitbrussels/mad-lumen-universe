@@ -1,0 +1,1052 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>MAD × LUMEN — From Vision to Market</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%230d0d0d'/><text y='72' x='50' font-size='64' font-family='Helvetica,Arial' font-weight='bold' fill='%23fff' text-anchor='middle'>M</text></svg>">
+<style>
+:root{
+  --ink:#0d0d0d;
+  --paper:#ffffff;
+  --grey-05:#f6f6f6;
+  --grey-10:#ececec;
+  --grey-20:#d9d9d9;
+  --grey-45:#8a8a8a;
+  --grey-60:#5e5e5e;
+  --accent:#b94a34;
+  --rule:#0d0d0d;
+  --nav-w:264px;
+  --pad:clamp(20px,4vw,72px);
+  --font:"Helvetica Neue",Helvetica,Arial,system-ui,sans-serif;
+  --ease:cubic-bezier(.22,.61,.36,1);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{
+  margin:0;background:var(--paper);color:var(--ink);
+  font-family:var(--font);font-size:16px;line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4{margin:0;font-weight:700;letter-spacing:-.02em;text-transform:uppercase}
+p{margin:0}
+button{font:inherit;color:inherit;background:none;border:none;padding:0;cursor:pointer}
+img{max-width:100%;display:block}
+
+/* ─── GATE ─────────────────────────────────────────── */
+#gate{
+  position:fixed;inset:0;z-index:200;background:var(--paper);
+  display:flex;align-items:center;justify-content:center;padding:24px;
+}
+#gate.hidden{display:none}
+.gate-box{width:100%;max-width:380px;text-align:left}
+.gate-mark{font-size:11px;letter-spacing:.18em;font-weight:700;text-transform:uppercase;margin-bottom:40px}
+.gate-box h1{font-size:clamp(28px,5vw,40px);line-height:1.05;margin-bottom:8px}
+.gate-box .sub{font-size:14px;color:var(--grey-60);margin-bottom:32px}
+.gate-field{display:flex;border-bottom:2px solid var(--ink)}
+.gate-field input{
+  flex:1;font:inherit;font-size:16px;padding:12px 0;border:none;outline:none;background:none;
+  letter-spacing:.04em;
+}
+.gate-field button{padding:12px 4px;font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase}
+.gate-err{font-size:13px;color:var(--accent);margin-top:14px;height:18px;opacity:0;transition:opacity .2s}
+.gate-err.show{opacity:1}
+.gate-foot{margin-top:48px;font-size:11px;letter-spacing:.1em;color:var(--grey-45);text-transform:uppercase}
+
+/* ─── SHELL ────────────────────────────────────────── */
+#shell{opacity:0;transition:opacity .5s var(--ease)}
+#shell.ready{opacity:1}
+
+#progress{
+  position:fixed;top:0;left:0;height:3px;width:0%;background:var(--accent);
+  z-index:120;transition:width .1s linear
+}
+
+/* ─── NAV ──────────────────────────────────────────── */
+nav#chapters{
+  position:fixed;top:0;left:0;bottom:0;width:var(--nav-w);z-index:110;
+  background:var(--paper);border-right:1px solid var(--grey-20);
+  padding:32px 0 24px;display:flex;flex-direction:column;
+}
+.nav-brand{padding:0 28px 28px;border-bottom:1px solid var(--grey-20);margin-bottom:8px}
+.nav-brand .logo{height:34px;width:auto;margin-bottom:12px}
+.nav-brand .pair{font-size:10px;letter-spacing:.2em;font-weight:700;color:var(--grey-60)}
+.nav-list{flex:1;overflow-y:auto;padding:12px 0}
+.nav-item{
+  display:block;width:100%;text-align:left;padding:11px 28px;position:relative;
+  font-size:12px;letter-spacing:.08em;font-weight:700;text-transform:uppercase;
+  color:var(--grey-45);transition:color .25s var(--ease)
+}
+.nav-item .num{font-size:10px;color:var(--grey-20);margin-right:10px;transition:color .25s}
+.nav-item:hover{color:var(--ink)}
+.nav-item.active{color:var(--ink)}
+.nav-item.active .num{color:var(--accent)}
+.nav-item.active::before{
+  content:"";position:absolute;left:0;top:8px;bottom:8px;width:3px;background:var(--accent)
+}
+.nav-foot{padding:20px 28px 0;border-top:1px solid var(--grey-20);font-size:10px;letter-spacing:.12em;color:var(--grey-45);text-transform:uppercase;line-height:1.7}
+.nav-toggle{display:none}
+
+main{margin-left:var(--nav-w)}
+
+/* ─── SECTIONS ─────────────────────────────────────── */
+section{padding:clamp(64px,9vh,110px) var(--pad);border-bottom:1px solid var(--grey-20);position:relative}
+.eyebrow{font-size:10px;letter-spacing:.22em;font-weight:700;text-transform:uppercase;color:var(--grey-45);margin-bottom:22px}
+.sec-title{font-size:clamp(30px,5.2vw,60px);line-height:1.02;margin-bottom:14px;max-width:22ch}
+.sec-sub{font-size:clamp(15px,1.6vw,19px);color:var(--grey-60);max-width:62ch;margin-bottom:34px}
+.rule{height:1px;background:var(--rule);margin-bottom:44px}
+
+/* reveal */
+.reveal{opacity:0;transform:translateY(22px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
+.reveal.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}}
+
+/* ─── HERO ─────────────────────────────────────────── */
+#hero{padding:0;border-bottom:none;min-height:100vh;display:flex;flex-direction:column}
+.hero-img{flex:1;min-height:52vh;overflow:hidden;background:var(--grey-10);position:relative}
+.hero-img img{width:100%;height:100%;object-fit:cover;transform:scale(1.04)}
+.hero-copy{padding:clamp(32px,5vw,60px) var(--pad) clamp(48px,7vw,80px)}
+.hero-lockup{display:flex;align-items:center;gap:22px;margin-bottom:26px;flex-wrap:wrap}
+.hero-lockup img{height:clamp(44px,6vw,72px);width:auto}
+.hero-lockup .x{font-size:clamp(30px,4.4vw,52px);font-weight:700;letter-spacing:-.02em}
+.hero-copy h1{font-size:clamp(32px,6.6vw,80px);line-height:1;margin-bottom:16px}
+.hero-copy .lead{font-size:clamp(15px,1.8vw,21px);color:var(--grey-60);margin-bottom:36px}
+.hero-actions{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+.btn{
+  display:inline-flex;align-items:center;gap:12px;padding:15px 26px;
+  font-size:11px;letter-spacing:.16em;font-weight:700;text-transform:uppercase;
+  border:2px solid var(--ink);transition:background .25s var(--ease),color .25s var(--ease)
+}
+.btn:hover{background:var(--ink);color:var(--paper)}
+.btn.solid{background:var(--ink);color:var(--paper)}
+.btn.solid:hover{background:var(--accent);border-color:var(--accent)}
+.hero-hint{font-size:10px;letter-spacing:.16em;color:var(--grey-45);text-transform:uppercase}
+
+/* ─── VISION ───────────────────────────────────────── */
+.split{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:clamp(28px,4.5vw,72px);align-items:start}
+.blackcard{background:var(--ink);color:var(--paper);padding:clamp(28px,3.4vw,44px);align-self:stretch}
+.blackcard .words{font-size:clamp(26px,3.6vw,46px);line-height:1.08;font-weight:700;text-transform:uppercase}
+.blackcard .words span{display:block;opacity:.35;transition:opacity .5s var(--ease)}
+.blackcard .words span.lit{opacity:1}
+.blackcard .foot{margin-top:clamp(28px,4vw,52px);border-top:1px solid rgba(255,255,255,.25);padding-top:20px}
+.blackcard .foot p{font-size:15px;line-height:1.6}
+.blackcard .foot p+p{margin-top:12px;color:rgba(255,255,255,.65);font-size:14px}
+
+.factlist{display:flex;flex-direction:column;gap:2px}
+.fact{border-top:1px solid var(--grey-20);padding:22px 0}
+.fact:last-child{border-bottom:1px solid var(--grey-20)}
+.fact h3{font-size:13px;letter-spacing:.12em;margin-bottom:10px}
+.fact p{font-size:clamp(15px,1.7vw,19px);line-height:1.5;color:var(--grey-60)}
+.fact .big{color:var(--ink);font-weight:700}
+
+/* ─── REFERENCES ───────────────────────────────────── */
+.refgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1px;background:var(--grey-20);border:1px solid var(--grey-20)}
+.ref{
+  background:var(--paper);padding:clamp(22px,2.6vw,32px);text-align:left;
+  transition:background .3s var(--ease),color .3s var(--ease);cursor:pointer;position:relative;min-height:190px
+}
+.ref:hover,.ref.open{background:var(--ink);color:var(--paper)}
+.ref h3{font-size:clamp(16px,2vw,22px);margin-bottom:12px}
+.ref .qual{font-size:13px;font-weight:700;letter-spacing:.06em;margin-bottom:14px}
+.ref .desc{font-size:14px;line-height:1.55;color:var(--grey-60);max-height:0;overflow:hidden;transition:max-height .45s var(--ease),opacity .3s;opacity:0}
+.ref:hover .desc,.ref.open .desc{max-height:120px;opacity:1;color:rgba(255,255,255,.75)}
+.ref .plus{position:absolute;right:22px;bottom:20px;font-size:18px;line-height:1;transition:transform .3s var(--ease)}
+.ref:hover .plus,.ref.open .plus{transform:rotate(45deg)}
+.interp{margin-top:40px;display:flex;align-items:baseline;gap:16px;flex-wrap:wrap}
+.interp .lbl{font-size:10px;letter-spacing:.2em;font-weight:700;color:var(--grey-45);text-transform:uppercase}
+.interp .val{font-size:clamp(20px,3vw,34px);font-weight:700;text-transform:uppercase;letter-spacing:-.02em}
+
+/* ─── TERRITORIES / GALLERY ────────────────────────── */
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:34px}
+.filter{
+  padding:11px 20px;border:1px solid var(--grey-20);font-size:11px;letter-spacing:.12em;
+  font-weight:700;text-transform:uppercase;color:var(--grey-60);
+  transition:all .25s var(--ease)
+}
+.filter:hover{border-color:var(--ink);color:var(--ink)}
+.filter.active{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.filter .n{opacity:.5;margin-left:8px;font-size:10px}
+
+.terr{margin-bottom:56px}
+.terr-head{margin-bottom:22px}
+.terr-head h3{font-size:clamp(20px,3vw,34px);margin-bottom:8px}
+.terr-head p{font-size:15px;color:var(--grey-60)}
+.gal{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:clamp(12px,1.6vw,22px)}
+.shot{position:relative;cursor:zoom-in;overflow:hidden;background:var(--grey-10)}
+.shot img{width:100%;aspect-ratio:3/2;object-fit:cover;transition:transform .7s var(--ease)}
+.shot:hover img{transform:scale(1.045)}
+.shot figcaption{
+  padding:14px 2px 0;font-size:13px;color:var(--grey-60);
+  display:flex;justify-content:space-between;gap:12px;align-items:baseline
+}
+.shot .zoom{
+  position:absolute;top:12px;right:12px;width:32px;height:32px;background:rgba(255,255,255,.92);
+  display:flex;align-items:center;justify-content:center;font-size:15px;
+  opacity:0;transform:translateY(-6px);transition:all .3s var(--ease)
+}
+.shot:hover .zoom{opacity:1;transform:none}
+.terr.hide{display:none}
+
+.note{background:var(--ink);color:var(--paper);padding:clamp(22px,2.6vw,32px);margin-top:12px}
+.note h4{font-size:13px;letter-spacing:.14em;margin-bottom:10px}
+.note p{font-size:15px;color:rgba(255,255,255,.78);line-height:1.6;max-width:80ch}
+
+/* ─── SPLIT LISTS ──────────────────────────────────── */
+.duo{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:clamp(28px,4vw,64px)}
+.col h3{font-size:14px;letter-spacing:.13em;margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid var(--grey-20)}
+.col ul{list-style:none;margin:0;padding:0}
+.col li{
+  font-size:clamp(15px,1.7vw,18px);line-height:1.45;padding:12px 0 12px 26px;position:relative;color:var(--grey-60)
+}
+.col li::before{
+  content:"";position:absolute;left:0;top:20px;width:11px;height:1px;background:var(--accent)
+}
+.col li strong{color:var(--ink);font-weight:700}
+
+/* WRH tag */
+.wrh-tag{
+  display:inline-flex;align-items:center;gap:8px;padding:5px 11px;background:var(--ink);color:var(--paper);
+  font-size:9px;letter-spacing:.16em;font-weight:700;text-transform:uppercase;margin-left:10px;
+  vertical-align:middle;white-space:nowrap
+}
+.wrh-tag::before{content:"";width:5px;height:5px;background:var(--accent);border-radius:50%}
+
+/* ─── ORG ──────────────────────────────────────────── */
+.org{display:flex;flex-direction:column;align-items:center;gap:0}
+.org-top{
+  background:var(--ink);color:var(--paper);padding:clamp(24px,3vw,38px) clamp(32px,5vw,72px);
+  text-align:center;max-width:460px;width:100%
+}
+.org-top h3{font-size:clamp(24px,3.4vw,38px);margin-bottom:12px}
+.org-top p{font-size:14px;color:rgba(255,255,255,.72);line-height:1.6}
+.org-stem{width:1px;height:44px;background:var(--ink)}
+.org-bar{width:100%;max-width:1000px;height:1px;background:var(--ink);position:relative}
+.org-bar::before,.org-bar::after{content:"";position:absolute;top:0;width:1px;height:32px;background:var(--ink)}
+.org-bar::before{left:0}.org-bar::after{right:0}
+.org-bar .mid{position:absolute;left:50%;top:0;width:1px;height:32px;background:var(--ink)}
+.org-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1px;background:var(--grey-20);width:100%;max-width:1000px;margin-top:32px;border:1px solid var(--grey-20)}
+.org-cell{
+  background:var(--paper);padding:clamp(22px,2.6vw,30px);text-align:center;
+  transition:background .3s var(--ease),color .3s var(--ease);cursor:default
+}
+.org-cell:hover{background:var(--grey-05)}
+.org-cell.is-wrh{border-top:3px solid var(--accent)}
+.org-cell h4{font-size:13px;letter-spacing:.13em;margin-bottom:16px}
+.org-cell .who{font-size:15px;font-weight:700;margin-bottom:10px}
+.org-cell p{font-size:14px;color:var(--grey-60);line-height:1.6}
+.org-caption{margin-top:32px;font-size:15px;color:var(--grey-60);text-align:center;max-width:70ch;margin-inline:auto}
+
+/* ─── JOURNEY ──────────────────────────────────────── */
+.phase-switch{display:flex;gap:8px;margin-bottom:30px;flex-wrap:wrap}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1px;background:var(--grey-20);border:1px solid var(--grey-20);margin-bottom:0}
+.step{
+  background:var(--paper);padding:clamp(20px,2.4vw,28px);text-align:left;position:relative;
+  transition:background .3s var(--ease),color .3s var(--ease)
+}
+.step:hover{background:var(--grey-05)}
+.step.active{background:var(--ink);color:var(--paper)}
+.step .num{font-size:clamp(22px,2.8vw,32px);font-weight:700;line-height:1;margin-bottom:14px;display:block}
+.step.active .num{color:var(--accent)}
+.step h4{font-size:11px;letter-spacing:.1em;margin-bottom:10px;line-height:1.4}
+.step p{font-size:13px;color:var(--grey-60);line-height:1.55}
+.step.active p{color:rgba(255,255,255,.72)}
+
+.detail{border:1px solid var(--grey-20);border-top:none;padding:clamp(26px,3.4vw,44px);background:var(--grey-05)}
+.detail-head{display:flex;align-items:baseline;gap:16px;margin-bottom:8px;flex-wrap:wrap}
+.detail-head .idx{font-size:11px;letter-spacing:.16em;font-weight:700;color:var(--accent)}
+.detail h3{font-size:clamp(20px,3vw,32px)}
+.detail>p.lead{font-size:16px;color:var(--grey-60);margin-bottom:28px;max-width:70ch}
+.detail .duo{gap:clamp(24px,3.4vw,52px)}
+.detail .col h3{font-size:12px;border-color:var(--grey-20)}
+.detail .col li{font-size:15px;padding:9px 0 9px 24px}
+.detail .col li::before{top:17px}
+.outputs{margin-top:28px;padding-top:20px;border-top:1px solid var(--grey-20);display:flex;gap:14px;flex-wrap:wrap;align-items:baseline}
+.outputs .lbl{font-size:10px;letter-spacing:.18em;font-weight:700;color:var(--grey-45);text-transform:uppercase}
+.outputs .val{font-size:15px;font-weight:700}
+.journey-note{margin-top:26px;font-size:15px;color:var(--grey-60)}
+
+/* ─── PIECE FLOW ───────────────────────────────────── */
+.flow{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:clamp(18px,2.4vw,34px)}
+.flow-item{padding-top:4px}
+.flow-item .num{font-size:clamp(30px,4vw,48px);font-weight:700;line-height:1;margin-bottom:18px;color:var(--grey-20);transition:color .4s var(--ease)}
+.flow-item.in .num{color:var(--ink)}
+.flow-item h4{font-size:12px;letter-spacing:.12em;margin-bottom:12px}
+.flow-item p{font-size:15px;color:var(--grey-60);line-height:1.55;margin-bottom:22px}
+.flow-item .out{border-top:1px solid var(--ink);padding-top:14px;font-size:14px;font-weight:700}
+
+/* ─── CLOSE ────────────────────────────────────────── */
+.close-grid{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:clamp(28px,4.5vw,72px);align-items:start}
+.close-list{list-style:none;margin:18px 0 0;padding:0}
+.close-list li{font-size:15px;line-height:1.9;color:rgba(255,255,255,.82)}
+
+/* ─── LIGHTBOX ─────────────────────────────────────── */
+#lb{
+  position:fixed;inset:0;z-index:180;background:rgba(13,13,13,.96);
+  display:none;align-items:center;justify-content:center;padding:clamp(16px,4vw,56px)
+}
+#lb.on{display:flex}
+#lb figure{margin:0;max-width:1200px;width:100%}
+#lb img{width:100%;max-height:80vh;object-fit:contain}
+#lb figcaption{color:rgba(255,255,255,.75);font-size:14px;margin-top:18px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+#lb figcaption .terr-lbl{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);font-weight:700}
+.lb-btn{
+  position:absolute;top:50%;transform:translateY(-50%);width:52px;height:52px;
+  color:#fff;font-size:26px;display:flex;align-items:center;justify-content:center;
+  background:rgba(255,255,255,.08);transition:background .25s
+}
+.lb-btn:hover{background:rgba(255,255,255,.2)}
+#lb-prev{left:clamp(8px,2vw,28px)}
+#lb-next{right:clamp(8px,2vw,28px)}
+#lb-close{position:absolute;top:clamp(14px,2.4vw,30px);right:clamp(14px,2.4vw,30px);width:44px;height:44px;color:#fff;font-size:24px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.08)}
+#lb-close:hover{background:rgba(255,255,255,.2)}
+
+/* ─── FOOTER ───────────────────────────────────────── */
+footer{padding:clamp(40px,5vw,64px) var(--pad);display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;align-items:flex-end}
+footer .f-l{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--grey-45);line-height:1.9}
+footer .f-r{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--grey-45);text-align:right;line-height:1.9}
+.disclaimer{padding:0 var(--pad) clamp(40px,5vw,64px);font-size:12px;color:var(--grey-45);line-height:1.7;max-width:90ch}
+
+/* ─── RESPONSIVE ───────────────────────────────────── */
+@media (max-width:1000px){
+  :root{--nav-w:0px}
+  nav#chapters{
+    transform:translateX(-100%);width:280px;transition:transform .35s var(--ease);
+    box-shadow:0 0 40px rgba(0,0,0,.14)
+  }
+  nav#chapters.open{transform:none}
+  .nav-toggle{
+    display:flex;align-items:center;gap:10px;position:fixed;top:14px;left:14px;z-index:130;
+    background:var(--ink);color:var(--paper);padding:12px 16px;
+    font-size:10px;letter-spacing:.16em;font-weight:700;text-transform:uppercase
+  }
+  main{margin-left:0}
+  .split,.close-grid{grid-template-columns:1fr}
+  #hero{padding-top:0}
+  .hero-copy{padding-top:56px}
+}
+@media (max-width:560px){
+  .refgrid,.steps,.org-row{grid-template-columns:1fr}
+  .gal{grid-template-columns:1fr}
+  .hero-img{min-height:38vh}
+}
+@media print{
+  nav#chapters,.nav-toggle,#progress,#gate,#lb,.filters,.phase-switch{display:none!important}
+  main{margin-left:0}
+  .terr.hide{display:block!important}
+  .ref .desc{max-height:none!important;opacity:1!important;color:var(--grey-60)!important}
+  .detail{page-break-inside:avoid}
+  section{page-break-after:always;border:none}
+}
+</style>
+</head>
+<body>
+
+<!-- ══ GATE ══ -->
+<div id="gate">
+  <div class="gate-box">
+    <div class="gate-mark">MAD × LUMEN</div>
+    <h1>From Vision<br>to Market</h1>
+    <p class="sub">An integrated brand development &amp; execution journey. This document is private.</p>
+    <form class="gate-field" id="gate-form">
+      <input type="password" id="gate-input" placeholder="Access code" autocomplete="off" aria-label="Access code" spellcheck="false">
+      <button type="submit">Enter →</button>
+    </form>
+    <div class="gate-err" id="gate-err">Incorrect access code.</div>
+    <div class="gate-foot">Brand development &amp; execution · Confidential</div>
+  </div>
+</div>
+
+<!-- ══ SHELL ══ -->
+<div id="shell" aria-hidden="true">
+<div id="progress"></div>
+<button class="nav-toggle" id="nav-toggle">☰ Index</button>
+
+<nav id="chapters">
+  <div class="nav-brand">
+    <img src="assets/img/logo-lumen.png" alt="LUMEN" class="logo">
+    <div class="pair">MAD × LUMEN</div>
+  </div>
+  <div class="nav-list" id="nav-list"></div>
+  <div class="nav-foot">Brand development<br>&amp; execution</div>
+</nav>
+
+<main>
+
+  <!-- 00 HERO -->
+  <section id="hero" data-nav="Cover">
+    <div class="hero-img"><img src="assets/img/hero-hands.webp" alt="Reaching hands connected by a continuous line" fetchpriority="high"></div>
+    <div class="hero-copy">
+      <div class="hero-lockup">
+        <img src="assets/img/logo-lumen.png" alt="LUMEN">
+        <span class="x">×</span>
+        <span class="x">MAD</span>
+      </div>
+      <h1>From Vision<br>to Market</h1>
+      <p class="lead">An integrated brand development &amp; execution journey</p>
+      <div class="hero-actions">
+        <button class="btn solid" data-goto="vision">Begin →</button>
+        <button class="btn" data-goto="territories">Creative universe</button>
+        <span class="hero-hint">← → to navigate</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 01 VISION -->
+  <section id="vision" data-nav="The vision">
+    <div class="reveal">
+      <div class="eyebrow">MAD × LUMEN</div>
+      <h2 class="sec-title">Your vision,<br>our starting point</h2>
+      <p class="sec-sub">A founder-led women's ready-to-wear brand, with a clear creative point of view</p>
+      <div class="rule"></div>
+    </div>
+    <div class="split reveal">
+      <div class="blackcard">
+        <div class="words" id="vision-words">
+          <span>Feminine</span><span>Colourful</span><span>Romantic</span><span>Playful</span>
+        </div>
+        <div class="foot">
+          <p>A contemporary, distinctive edge</p>
+          <p>Madawi's vision remains the starting point.</p>
+        </div>
+      </div>
+      <div class="factlist">
+        <div class="fact">
+          <h3>The brand ambition</h3>
+          <p>A coherent, desirable and commercially viable brand within the <span class="big">premium / mid-range</span> segment.</p>
+        </div>
+        <div class="fact">
+          <h3>The initial market</h3>
+          <p><span class="big">Saudi Arabia and the wider GCC.</span> A primarily direct-to-consumer model.</p>
+        </div>
+        <div class="fact">
+          <h3>The first offer</h3>
+          <p>An initial pipeline of approximately <span class="big">10–15 styles</span>. A focused launch capsule, followed by progressive drops.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 02 REFERENCES -->
+  <section id="references" data-nav="References">
+    <div class="reveal">
+      <div class="eyebrow">Creative exploration</div>
+      <h2 class="sec-title">The references you shared</h2>
+      <p class="sec-sub">Different qualities to interpret through MAD's own point of view</p>
+      <div class="rule"></div>
+    </div>
+    <div class="refgrid reveal" id="refgrid"></div>
+    <div class="interp reveal">
+      <span class="lbl">Our interpretation</span>
+      <span class="val">Romanticism &amp; playful chic</span>
+    </div>
+  </section>
+
+  <!-- 03 TERRITORIES -->
+  <section id="territories" data-nav="Creative universe">
+    <div class="reveal">
+      <div class="eyebrow">MAD / Provisional creative exploration</div>
+      <h2 class="sec-title">Creative territories</h2>
+      <p class="sec-sub">Four directions built on one shared design language. Filter to explore each territory, click any image to enlarge.</p>
+      <div class="rule"></div>
+    </div>
+    <div class="filters reveal" id="filters"></div>
+    <div id="territories-wrap"></div>
+    <div class="note reveal">
+      <h4>A creative starting point</h4>
+      <p>These explorations are AI-generated and support discussion. Madawi's choices guide the final collection.</p>
+    </div>
+  </section>
+
+  <!-- 04 COLLECTION -->
+  <section id="collection" data-nav="First collection">
+    <div class="reveal">
+      <div class="eyebrow">From exploration to product</div>
+      <h2 class="sec-title">A focused first collection</h2>
+      <p class="sec-sub">Creative territories help us choose a coherent offer with Madawi</p>
+      <div class="rule"></div>
+    </div>
+    <div class="duo reveal">
+      <div class="col">
+        <h3>One shared design language</h3>
+        <ul>
+          <li>Fluid silhouettes and generous movement</li>
+          <li>Soft prints and expressive colour</li>
+          <li>Asymmetry, overlapping panels and light layers</li>
+          <li>Considered detail with a playful attitude</li>
+        </ul>
+      </div>
+      <div class="col">
+        <h3>Choices for the first capsule</h3>
+        <ul>
+          <li>Select the strongest directions together</li>
+          <li>Prioritise categories and signature pieces</li>
+          <li>Test fabrics, construction and target costing</li>
+          <li>Sequence later drops around customer response</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 05 CAPABILITIES -->
+  <section id="capabilities" data-nav="Capabilities">
+    <div class="reveal">
+      <div class="eyebrow">MAD × LUMEN</div>
+      <h2 class="sec-title">Expanded capabilities</h2>
+      <p class="sec-sub">A stronger senior team, with creative and digital delivery integrated into the LUMEN offer through White Rabbit Hole</p>
+      <div class="rule"></div>
+    </div>
+    <div class="duo reveal">
+      <div class="col">
+        <h3>The strategic &amp; operational core</h3>
+        <ul>
+          <li>Business and brand positioning</li>
+          <li>Collection architecture and product direction</li>
+          <li>Development, sourcing and production</li>
+          <li>Market access and launch coordination</li>
+        </ul>
+      </div>
+      <div class="col">
+        <h3>The expanded delivery capability <span class="wrh-tag">White Rabbit Hole</span></h3>
+        <ul>
+          <li>Visual identity and brand book execution</li>
+          <li>Creative direction, content and campaign assets</li>
+          <li>Digital experience and e-commerce design</li>
+          <li>AI-assisted creative and product workflows</li>
+        </ul>
+      </div>
+    </div>
+    <div class="rule" style="margin:44px 0"></div>
+    <div class="duo reveal">
+      <div class="col">
+        <h3>What this means for MAD</h3>
+        <ul>
+          <li>Closer alignment between the brand, the product and the way it reaches the customer.</li>
+          <li>Senior involvement throughout, with fewer separate creative handovers to coordinate.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 06 TEAM -->
+  <section id="team" data-nav="The team">
+    <div class="reveal">
+      <div class="eyebrow">MAD × LUMEN</div>
+      <h2 class="sec-title">Your senior team</h2>
+      <p class="sec-sub">A close working relationship, with Madawi's creative ownership at the centre</p>
+      <div class="rule"></div>
+    </div>
+    <div class="org reveal">
+      <div class="org-top">
+        <h3>Madawi</h3>
+        <p>Vision, inspirations and sketches<br>Creative choices and approvals</p>
+      </div>
+      <div class="org-stem"></div>
+      <div class="org-bar"><div class="mid"></div></div>
+      <div class="org-row">
+        <div class="org-cell">
+          <h4>Strategy &amp; product</h4>
+          <div class="who">Aïssata / Lead consultant</div>
+          <p>Business, collection and product direction<br>Operational co-pilot</p>
+        </div>
+        <div class="org-cell is-wrh">
+          <h4>Creative &amp; digital</h4>
+          <div class="who">White Rabbit Hole</div>
+          <p>Brand expression, content and digital<br>AI-assisted creative workflows</p>
+        </div>
+        <div class="org-cell">
+          <h4>Technical &amp; production</h4>
+          <div class="who">LUMEN coordination</div>
+          <p>Technical specialists and suppliers<br>Sampling, fittings and manufacturing</p>
+        </div>
+      </div>
+      <p class="org-caption">Specialists join where the product requires them. LUMEN coordinates the work and the decisions.</p>
+    </div>
+  </section>
+
+  <!-- 07 JOURNEY -->
+  <section id="journey" data-nav="The journey">
+    <div class="reveal">
+      <div class="eyebrow">MAD × LUMEN</div>
+      <h2 class="sec-title">The MAD development journey</h2>
+      <p class="sec-sub">Two connected phases, with creative, product and digital work progressing in parallel. Select any step to open its detail.</p>
+      <div class="rule"></div>
+    </div>
+    <div class="phase-switch reveal" id="phase-switch">
+      <button class="filter active" data-phase="1">Phase 1 / Initial build</button>
+      <button class="filter" data-phase="2">Phase 2 / Execution &amp; launch</button>
+    </div>
+    <div class="steps reveal" id="steps"></div>
+    <div class="detail reveal" id="detail"></div>
+    <p class="journey-note reveal">Digital and content planning begin early. Launch timing follows product and operational readiness.</p>
+  </section>
+
+  <!-- 08 PIECE -->
+  <section id="piece" data-nav="One MAD piece">
+    <div class="reveal">
+      <div class="eyebrow">MAD × LUMEN</div>
+      <h2 class="sec-title">One MAD piece,<br>through the process</h2>
+      <p class="sec-sub">A proposed working sequence, applied to a selected style from Madawi's own collection</p>
+      <div class="rule"></div>
+    </div>
+    <div class="flow reveal" id="flow"></div>
+    <div class="note reveal" style="margin-top:44px">
+      <h4>One continuous thread</h4>
+      <p>AI assists preparation and iteration. Madawi and the relevant experts review the decisions.</p>
+    </div>
+  </section>
+
+  <!-- 09 CLOSE -->
+  <section id="launch" data-nav="Ready for launch">
+    <div class="reveal">
+      <div class="eyebrow">MAD × LUMEN</div>
+      <h2 class="sec-title">Ready for launch,<br>built for what follows</h2>
+      <p class="sec-sub">A coordinated first launch, followed by learning, focused drops and progressive development</p>
+      <div class="rule"></div>
+    </div>
+    <div class="close-grid reveal">
+      <div class="blackcard">
+        <div class="words"><span class="lit">MAD's</span><span class="lit">launch</span><span class="lit">foundations</span></div>
+        <ul class="close-list">
+          <li>A defined brand</li>
+          <li>A focused product offer</li>
+          <li>Reviewed product documentation</li>
+          <li>A prepared digital experience</li>
+          <li>A coherent set of launch assets</li>
+        </ul>
+      </div>
+      <div class="factlist">
+        <div class="fact">
+          <h3>The next drops</h3>
+          <p>Use early customer and commercial feedback to refine the offer, content and release priorities.</p>
+        </div>
+        <div class="fact">
+          <h3>Team autonomy</h3>
+          <p>Targeted AI workshops and brand templates can support selected day-to-day content tasks.</p>
+        </div>
+        <div class="fact">
+          <h3>Future product exploration</h3>
+          <p>Explore accessories and selected components. 3D printing may support form studies and prototypes, subject to material, finish and production validation.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="f-l">MAD × LUMEN<br>Brand development &amp; execution</div>
+    <div class="f-r">Creative &amp; digital delivery<br>by White Rabbit Hole</div>
+  </footer>
+  <p class="disclaimer">All garment visuals in this document are AI-generated creative explorations produced to support discussion. They are not photographs of finished product. Final designs, materials and construction follow Madawi's creative choices and technical validation.</p>
+
+</main>
+</div>
+
+<!-- ══ LIGHTBOX ══ -->
+<div id="lb" role="dialog" aria-modal="true" aria-label="Image viewer">
+  <button class="lb-btn" id="lb-prev" aria-label="Previous">‹</button>
+  <figure>
+    <img id="lb-img" src="" alt="">
+    <figcaption>
+      <span id="lb-cap"></span>
+      <span class="terr-lbl" id="lb-terr"></span>
+    </figcaption>
+  </figure>
+  <button class="lb-btn" id="lb-next" aria-label="Next">›</button>
+  <button id="lb-close" aria-label="Close">×</button>
+</div>
+
+<script>
+(()=>{
+"use strict";
+
+/* ═══ ACCESS ═══════════════════════════════════════
+   Set REQUIRE_CODE = true to switch the access gate back on.
+   To change the code: run in a terminal
+     printf '%s' 'YOURCODE' | shasum -a 256
+   and paste the result into CODE_HASH below.
+   Current CODE_HASH corresponds to: MAD2026            */
+const REQUIRE_CODE = false;
+const CODE_HASH = "1b61ccf384b0f9be07fb17769ff4e1dbab93796f2a72f0fc65b1f700a383c395";
+const KEY = "mad-lumen-access";
+
+const gate  = document.getElementById("gate");
+const shell = document.getElementById("shell");
+const form  = document.getElementById("gate-form");
+const input = document.getElementById("gate-input");
+const err   = document.getElementById("gate-err");
+
+async function sha256(s){
+  const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(s));
+  return [...new Uint8Array(buf)].map(b=>b.toString(16).padStart(2,"0")).join("");
+}
+function unlock(){
+  gate.classList.add("hidden");
+  shell.classList.add("ready");
+  shell.setAttribute("aria-hidden","false");
+  build();
+}
+form.addEventListener("submit", async e=>{
+  e.preventDefault();
+  const h = await sha256(input.value.trim());
+  if(h === CODE_HASH){ try{sessionStorage.setItem(KEY,"1")}catch(_){} unlock(); }
+  else { err.classList.add("show"); input.value=""; setTimeout(()=>err.classList.remove("show"),2200); }
+});
+/* the initial unlock runs at the very end of this script,
+   once every const below has been initialised */
+
+/* ═══ DATA ═════════════════════════════════════════ */
+const REFS = [
+  {name:"Zimmermann", qual:"Romantic femininity",        desc:"Lightness, material richness and considered detail."},
+  {name:"Jacquemus",  qual:"A distinctive identity",     desc:"Recognisable proportions and strong visual composition."},
+  {name:"Farm Rio",   qual:"Colour and personality",     desc:"Expressive prints and a joyful sense of colour."},
+  {name:"Ganni",      qual:"Playful contemporary attitude", desc:"Spontaneity and an unexpected, modern edge."}
+];
+
+const TERRITORIES = [
+  {id:"flower", label:"Flower", title:"Flower / Romantic movement",
+   sub:"Soft floral expression, floating fabrics and a contemporary attitude",
+   shots:[
+     {src:"flower-floating-dress", cap:"The floating floral dress"},
+     {src:"flower-blouse-trouser", cap:"The blouse and fluid trouser set"},
+     {src:"colour-warm-separates", cap:"Warm colour and coordinated separates"},
+     {src:"colour-open-layer",     cap:"An open floral layer over a clean base"}
+   ]},
+  {id:"architecture", label:"Soft architecture", title:"Soft architecture",
+   sub:"Painted stripes, rounded motifs and deliberately offset layers",
+   shots:[
+     {src:"arch-vertical-rhythm", cap:"Soft vertical rhythm"},
+     {src:"arch-stepped-layers",  cap:"Architectural print and stepped layers"}
+   ]},
+  {id:"abaya", label:"Abaya editions", title:"Abaya editions",
+   sub:"An airy contemporary outer layer connected to the MAD creative world — print, frame, colour and air",
+   shots:[
+     {src:"abaya-flower-veil",   cap:"Flower Veil"},
+     {src:"abaya-soft-frame",    cap:"Soft Frame"},
+     {src:"abaya-colour-motion", cap:"Colour in Motion"},
+     {src:"abaya-air-layers",    cap:"Air Layers"}
+   ]},
+  {id:"afterglow", label:"Afterglow", title:"Afterglow / A festive possibility",
+   sub:"The same creative markers, with carefully placed sparkle — crystal edging, selective floral sequin embroidery and a sculptural jewel holding a drape",
+   shots:[
+     {src:"afterglow-festive", cap:"A festive interpretation of the same wardrobe"}
+   ]}
+];
+
+const STEPS = [
+ {ph:1,n:"01",t:"Business roadmap",s:"Priorities, customer and route to market",
+  title:"Brand foundations & identity",
+  lead:"A shared foundation for the collection, communication and customer experience",
+  cols:[{h:"Business development roadmap",items:["Customer, market and price ambition","DTC model and development priorities","Resources, sequencing and investment framework","Key milestones and dependencies"]},
+        {h:"Brand platform & expression",wrh:true,items:["Purpose, positioning and differentiation","Personality, narrative and tone of voice","Logo system, typography and colour palette","Imagery principles and key brand applications"]}],
+  note:"AI can support visual research and the comparison of creative directions. Madawi and LUMEN select and refine the direction that belongs to MAD.",
+  out:"MAD development roadmap / Brand platform / Visual identity guidelines & brand book"},
+
+ {ph:1,n:"02",t:"Brand & identity",s:"Positioning and visual expression",
+  title:"Brand foundations & identity",
+  lead:"A shared foundation for the collection, communication and customer experience",
+  cols:[{h:"Business development roadmap",items:["Customer, market and price ambition","DTC model and development priorities","Resources, sequencing and investment framework","Key milestones and dependencies"]},
+        {h:"Brand platform & expression",wrh:true,items:["Purpose, positioning and differentiation","Personality, narrative and tone of voice","Logo system, typography and colour palette","Imagery principles and key brand applications"]}],
+  note:"AI can support visual research and the comparison of creative directions. Madawi and LUMEN select and refine the direction that belongs to MAD.",
+  out:"MAD development roadmap / Brand platform / Visual identity guidelines & brand book"},
+
+ {ph:1,n:"03",t:"Collection & product",s:"Offer, briefs and technical preparation",
+  title:"Collection & product build",
+  lead:"Translating Madawi's creative vision into a focused, commercially grounded first offer",
+  cols:[{h:"Collection architecture",items:["Category mix and offer depth","Hero, signature and core pieces","Approximately 10–15 styles","Launch capsule and drop sequence"]},
+        {h:"Product direction",items:["Founder sketches and inspirations","Silhouette, colour and materials","Product development briefs","Flats and initial documentation"]},
+        {h:"Commercial framework",items:["Price architecture","Target costing and margins","Initial open-to-buy framework","Development and sampling priorities"]}],
+  note:"AI-assisted product exploration: structure reference material, prepare brief drafts and explore variations for expert review."},
+
+ {ph:1,n:"04",t:"Sourcing & sampling",s:"Partners, materials and first samples",
+  title:"Technical development & sourcing",
+  lead:"Clear product information, reviewed by the right experts and tested through physical samples",
+  cols:[{h:"Product documentation",items:["Technical flats and construction details","Materials and trims / bill of materials","Measurement tables from validated bases","Tech pack preparation and version tracking"]},
+        {h:"Sourcing & first samples",items:["Supplier and technical partner identification","Material feasibility, MOQ and lead times","Initial costing and sampling priorities","Prototype coordination and first product review"]}],
+  note:"Where AI supports the work: organise inputs, prepare documentation drafts, consolidate comments and track revisions. LUMEN and technical partners validate construction, measurements and fit through sample reviews."},
+
+ {ph:2,n:"05",t:"Refinement & production",s:"Fittings, approvals and manufacturing",
+  title:"Refinement & production",
+  lead:"Hands-on coordination through the decisions that make the product ready to manufacture",
+  cols:[{h:"The production sequence",items:["<strong>Review</strong> — fit and finish, technical feedback","<strong>Refine</strong> — document corrections, review revised samples","<strong>Approve</strong> — confirm specifications, approve final sample","<strong>Produce</strong> — quality, cost and timing, prepare delivery"]},
+        {h:"LUMEN's operational role",items:["Coordinate fittings, suppliers and corrective actions","Review costing, priorities and production milestones","Keep approved references and revisions together","Use AI to structure feedback for human review"]}]},
+
+ {ph:2,n:"06",t:"Digital & content",s:"Store experience and launch assets",
+  title:"Digital experience & launch",
+  lead:"The product, the store and the campaign prepared around the same brand decisions",
+  cols:[{h:"The customer experience",wrh:true,items:["E-commerce structure and design","Product page information and brand storytelling","Packaging design and customer touchpoints","Language, payment and delivery requirements"]},
+        {h:"The launch expression",wrh:true,items:["Creative concept and campaign direction","Product imagery, video and launch assets","Content variations across selected channels","Activation planning and launch coordination"]}],
+  note:"AI within the content workflow: explore campaign concepts and prepare selected content variations. Build final product content around accurate references of the approved garments. Technical build, production volumes, media and specialist requirements are defined within each workstream."},
+
+ {ph:2,n:"07",t:"Go-to-market & launch",s:"Readiness, campaign and activation",
+  title:"Digital experience & launch",
+  lead:"The product, the store and the campaign prepared around the same brand decisions",
+  cols:[{h:"The customer experience",wrh:true,items:["E-commerce structure and design","Product page information and brand storytelling","Packaging design and customer touchpoints","Language, payment and delivery requirements"]},
+        {h:"The launch expression",wrh:true,items:["Creative concept and campaign direction","Product imagery, video and launch assets","Content variations across selected channels","Activation planning and launch coordination"]}],
+  note:"AI within the content workflow: explore campaign concepts and prepare selected content variations. Build final product content around accurate references of the approved garments."},
+
+ {ph:2,n:"08",t:"Drops & development",s:"Customer feedback and next releases",
+  title:"Drops & ongoing development",
+  lead:"Learning from the first launch and sequencing what comes next",
+  cols:[{h:"The next drops",items:["Early customer and commercial feedback","Refine the offer, content and release priorities","Sequence later drops around customer response"]},
+        {h:"Building autonomy",wrh:true,items:["Targeted AI workshops and brand templates","Support for selected day-to-day content tasks","Explore accessories and selected components","3D printing for form studies and prototypes, subject to validation"]}]}
+];
+
+const FLOW = [
+ {n:"01",t:"Founder input",     p:"Sketch, references and design intention",       o:"A clear product brief"},
+ {n:"02",t:"Product translation",p:"Flat views, materials and construction notes", o:"A reviewed technical dossier"},
+ {n:"03",t:"Physical validation",p:"Sample, fitting and documented revisions",     o:"An approved product reference"},
+ {n:"04",t:"Market expression", p:"Product page, imagery and campaign application", o:"Coherent launch content"}
+];
+
+/* ═══ BUILD ════════════════════════════════════════ */
+let built = false;
+function build(){
+  if(built) return; built = true;
+  buildNav(); buildRefs(); buildTerritories(); buildJourney(); buildFlow();
+  initReveal(); initVisionWords(); initLightbox(); initProgress(); initKeys(); initNavToggle();
+}
+
+/* --- nav --- */
+const sections = [...document.querySelectorAll("section[data-nav]")];
+function buildNav(){
+  const list = document.getElementById("nav-list");
+  sections.forEach((s,i)=>{
+    const b = document.createElement("button");
+    b.className = "nav-item";
+    b.dataset.target = s.id;
+    b.innerHTML = `<span class="num">${String(i).padStart(2,"0")}</span>${s.dataset.nav}`;
+    b.addEventListener("click",()=>{ go(s.id); closeNav(); });
+    list.appendChild(b);
+  });
+  const items = [...list.children];
+  const spy = new IntersectionObserver(es=>{
+    es.forEach(e=>{
+      if(e.isIntersecting){
+        items.forEach(i=>i.classList.toggle("active", i.dataset.target === e.target.id));
+      }
+    });
+  },{rootMargin:"-45% 0px -50% 0px"});
+  sections.forEach(s=>spy.observe(s));
+}
+function go(id){ document.getElementById(id)?.scrollIntoView({behavior:"smooth",block:"start"}); }
+document.querySelectorAll("[data-goto]").forEach(b=>b.addEventListener("click",()=>go(b.dataset.goto)));
+
+function initNavToggle(){
+  const nav = document.getElementById("chapters");
+  const tog = document.getElementById("nav-toggle");
+  tog.addEventListener("click",e=>{ e.stopPropagation(); nav.classList.toggle("open"); });
+  document.addEventListener("click",e=>{
+    if(nav.classList.contains("open") && !nav.contains(e.target) && e.target!==tog) nav.classList.remove("open");
+  });
+}
+function closeNav(){ document.getElementById("chapters").classList.remove("open"); }
+
+/* --- refs --- */
+function buildRefs(){
+  const g = document.getElementById("refgrid");
+  REFS.forEach(r=>{
+    const b = document.createElement("button");
+    b.className = "ref";
+    b.innerHTML = `<h3>${r.name}</h3><div class="qual">${r.qual}</div>
+      <div class="desc">${r.desc}</div><span class="plus">+</span>`;
+    b.addEventListener("click",()=>b.classList.toggle("open"));
+    g.appendChild(b);
+  });
+}
+
+/* --- territories --- */
+let SHOTS = [];
+function buildTerritories(){
+  const wrap = document.getElementById("territories-wrap");
+  const filters = document.getElementById("filters");
+  const total = TERRITORIES.reduce((a,t)=>a+t.shots.length,0);
+
+  const mkFilter = (id,label,count,active)=>{
+    const b = document.createElement("button");
+    b.className = "filter" + (active?" active":"");
+    b.dataset.filter = id;
+    b.innerHTML = `${label}<span class="n">${count}</span>`;
+    b.addEventListener("click",()=>{
+      [...filters.children].forEach(f=>f.classList.toggle("active", f===b));
+      document.querySelectorAll(".terr").forEach(t=>{
+        t.classList.toggle("hide", id!=="all" && t.dataset.terr!==id);
+      });
+    });
+    filters.appendChild(b);
+  };
+  mkFilter("all","All territories",total,true);
+  TERRITORIES.forEach(t=>mkFilter(t.id,t.label,t.shots.length,false));
+
+  let idx = 0;
+  TERRITORIES.forEach(t=>{
+    const sec = document.createElement("div");
+    sec.className = "terr reveal";
+    sec.dataset.terr = t.id;
+    const shots = t.shots.map(s=>{
+      const i = idx++;
+      SHOTS.push({...s, terr:t.label});
+      return `<figure class="shot" data-i="${i}">
+        <img src="assets/img/${s.src}.webp" alt="${s.cap}" loading="lazy" width="1536" height="1024">
+        <span class="zoom">⤢</span>
+        <figcaption><span>${s.cap}</span></figcaption>
+      </figure>`;
+    }).join("");
+    sec.innerHTML = `<div class="terr-head"><h3>${t.title}</h3><p>${t.sub}</p></div><div class="gal">${shots}</div>`;
+    wrap.appendChild(sec);
+  });
+}
+
+/* --- journey --- */
+let curPhase = 1, curStep = 0;
+function buildJourney(){
+  document.querySelectorAll("#phase-switch .filter").forEach(b=>{
+    b.addEventListener("click",()=>{
+      document.querySelectorAll("#phase-switch .filter").forEach(x=>x.classList.toggle("active",x===b));
+      curPhase = +b.dataset.phase;
+      const first = STEPS.findIndex(s=>s.ph===curPhase);
+      renderSteps(); selectStep(first);
+    });
+  });
+  renderSteps(); selectStep(0);
+}
+function renderSteps(){
+  const c = document.getElementById("steps");
+  c.innerHTML = "";
+  STEPS.forEach((s,i)=>{
+    if(s.ph!==curPhase) return;
+    const b = document.createElement("button");
+    b.className = "step" + (i===curStep?" active":"");
+    b.dataset.i = i;
+    b.innerHTML = `<span class="num">${s.n}</span><h4>${s.t}</h4><p>${s.s}</p>`;
+    b.addEventListener("click",()=>selectStep(i));
+    c.appendChild(b);
+  });
+}
+function selectStep(i){
+  curStep = i;
+  const s = STEPS[i];
+  document.querySelectorAll("#steps .step").forEach(b=>b.classList.toggle("active", +b.dataset.i===i));
+  const cols = s.cols.map(c=>`
+    <div class="col">
+      <h3>${c.h}${c.wrh?'<span class="wrh-tag">White Rabbit Hole</span>':""}</h3>
+      <ul>${c.items.map(x=>`<li>${x}</li>`).join("")}</ul>
+    </div>`).join("");
+  document.getElementById("detail").innerHTML = `
+    <div class="detail-head">
+      <span class="idx">Step ${s.n}</span>
+      <h3>${s.title}</h3>
+    </div>
+    <p class="lead">${s.lead}</p>
+    <div class="duo">${cols}</div>
+    ${s.note?`<div class="note" style="margin-top:28px"><p>${s.note}</p></div>`:""}
+    ${s.out?`<div class="outputs"><span class="lbl">Outputs</span><span class="val">${s.out}</span></div>`:""}`;
+}
+
+/* --- flow --- */
+function buildFlow(){
+  const c = document.getElementById("flow");
+  c.innerHTML = FLOW.map(f=>`
+    <div class="flow-item reveal">
+      <div class="num">${f.n}</div>
+      <h4>${f.t}</h4>
+      <p>${f.p}</p>
+      <div class="out">${f.o}</div>
+    </div>`).join("");
+}
+
+/* --- reveal --- */
+function initReveal(){
+  const io = new IntersectionObserver(es=>{
+    es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add("in"); io.unobserve(e.target); } });
+  },{rootMargin:"0px 0px -8% 0px",threshold:.06});
+  document.querySelectorAll(".reveal").forEach(el=>io.observe(el));
+}
+
+/* --- vision words --- */
+function initVisionWords(){
+  const spans = [...document.querySelectorAll("#vision-words span")];
+  const io = new IntersectionObserver(es=>{
+    if(es[0].isIntersecting){
+      spans.forEach((s,i)=>setTimeout(()=>s.classList.add("lit"), i*180));
+      io.disconnect();
+    }
+  },{threshold:.4});
+  if(spans[0]) io.observe(spans[0].parentElement);
+}
+
+/* --- lightbox --- */
+let lbIdx = 0;
+function initLightbox(){
+  const lb = document.getElementById("lb");
+  const img = document.getElementById("lb-img");
+  const cap = document.getElementById("lb-cap");
+  const ter = document.getElementById("lb-terr");
+
+  function show(i){
+    const visible = [...document.querySelectorAll(".terr:not(.hide) .shot")].map(f=>+f.dataset.i);
+    if(!visible.length) return;
+    if(!visible.includes(i)) i = visible[0];
+    lbIdx = i;
+    const s = SHOTS[i];
+    img.src = `assets/img/${s.src}.webp`;
+    img.alt = s.cap; cap.textContent = s.cap; ter.textContent = s.terr;
+    lb.classList.add("on");
+  }
+  function step(d){
+    const visible = [...document.querySelectorAll(".terr:not(.hide) .shot")].map(f=>+f.dataset.i);
+    const p = visible.indexOf(lbIdx);
+    show(visible[(p + d + visible.length) % visible.length]);
+  }
+  function close(){ lb.classList.remove("on"); }
+
+  document.addEventListener("click",e=>{
+    const shot = e.target.closest(".shot");
+    if(shot) show(+shot.dataset.i);
+  });
+  document.getElementById("lb-next").addEventListener("click",e=>{e.stopPropagation();step(1)});
+  document.getElementById("lb-prev").addEventListener("click",e=>{e.stopPropagation();step(-1)});
+  document.getElementById("lb-close").addEventListener("click",close);
+  lb.addEventListener("click",e=>{ if(e.target===lb) close(); });
+  window.__lb = {step,close,isOpen:()=>lb.classList.contains("on")};
+}
+
+/* --- progress --- */
+function initProgress(){
+  const bar = document.getElementById("progress");
+  const upd = ()=>{
+    const h = document.documentElement.scrollHeight - window.innerHeight;
+    bar.style.width = (h>0 ? (window.scrollY/h)*100 : 0) + "%";
+  };
+  window.addEventListener("scroll",upd,{passive:true});
+  window.addEventListener("resize",upd); upd();
+}
+
+/* --- keyboard --- */
+function initKeys(){
+  document.addEventListener("keydown",e=>{
+    if(window.__lb?.isOpen()){
+      if(e.key==="Escape") window.__lb.close();
+      if(e.key==="ArrowRight") window.__lb.step(1);
+      if(e.key==="ArrowLeft") window.__lb.step(-1);
+      return;
+    }
+    if(e.target.tagName==="INPUT") return;
+    if(e.key!=="ArrowRight" && e.key!=="ArrowLeft") return;
+    e.preventDefault();
+    const y = window.scrollY + 10;
+    let cur = 0;
+    sections.forEach((s,i)=>{ if(s.offsetTop <= y) cur = i; });
+    const next = cur + (e.key==="ArrowRight" ? 1 : -1);
+    if(sections[next]) go(sections[next].id);
+  });
+}
+
+/* ═══ START ════════════════════════════════════════ */
+let already=false; try{ already = sessionStorage.getItem(KEY)==="1" }catch(_){}
+if(!REQUIRE_CODE || already) unlock(); else setTimeout(()=>input.focus(),260);
+
+})();
+</script>
+</body>
+</html>
