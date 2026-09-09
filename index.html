@@ -742,6 +742,10 @@ function unlock(){
   shell.classList.add("ready");
   shell.setAttribute("aria-hidden","false");
   build();
+  /* always land on the cover, never on a scroll position
+     the browser restored from a previous visit */
+  try{ history.scrollRestoration = "manual" }catch(_){}
+  window.scrollTo({top:0,behavior:"instant"});
 }
 form.addEventListener("submit", async e=>{
   e.preventDefault();
