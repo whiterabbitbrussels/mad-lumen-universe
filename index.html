@@ -94,20 +94,18 @@ nav#chapters{
 .nav-item.active::before{
   content:"";position:absolute;left:0;top:8px;bottom:8px;width:3px;background:var(--accent)
 }
-/* Collection images closing the sidebar. They cross-fade continuously as the
-   page scrolls — opacity is driven from scroll position, not from a timer, so
-   the sequence tracks the wheel in both directions. */
+/* Collection images closing the sidebar: a continuous strip, each frame butted
+   against the next, travelling through a fixed window as the page scrolls.
+   The strip is translated from scroll position, so it tracks the wheel in both
+   directions and two frames share the window mid-travel. */
 .nav-floral{
   flex:none;height:clamp(130px,22vh,230px);margin:0 0 20px;
   position:relative;overflow:hidden;background:var(--grey-10)
 }
-.nav-floral span{
-  position:absolute;inset:0;background-size:cover;background-position:center;
-  opacity:0;will-change:opacity
-}
-@media (prefers-reduced-motion:reduce){
-  /* no cross-fading: the first frame simply stays */
-  .nav-floral span{transition:none}
+.nav-strip{position:absolute;top:0;left:0;right:0;will-change:transform}
+.nav-strip span{
+  display:block;height:var(--win,180px);
+  background-size:cover;background-position:center
 }
 .nav-foot{padding:20px 28px 0;border-top:1px solid var(--grey-20);font-size:10px;letter-spacing:.12em;color:var(--grey-45);text-transform:uppercase;line-height:1.7}
 .nav-toggle{display:none}
@@ -1269,29 +1267,27 @@ function initNavMedia(){
 
   /* the cover, then one frame per creative territory, in deck order */
   const frames = ["hero-cover", ...SHOTS.map(s=>s.src)];
-  const layers = frames.map(name=>{
+  const strip = document.createElement("div");
+  strip.className = "nav-strip";
+  frames.forEach(name=>{
     const el = document.createElement("span");
     el.style.backgroundImage = `url("assets/img/${name}.webp")`;
-    box.appendChild(el);
-    return el;
+    strip.appendChild(el);
   });
-  layers[0].style.opacity = 1;
+  box.appendChild(strip);
 
-  const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  if(reduced) return;
+  if(window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
   let ticking = false;
   function paint(){
     ticking = false;
+    /* each frame is exactly as tall as the window, so the strip advances by
+       one full frame per step and never shows a seam */
+    const win = box.clientHeight;
+    strip.style.setProperty("--win", win + "px");
     const max = document.documentElement.scrollHeight - window.innerHeight;
     const p = max > 0 ? Math.min(Math.max(window.scrollY / max, 0), 1) : 0;
-    /* position along the sequence; neighbouring frames overlap, so the
-       hand-off is a genuine cross-fade rather than a swap */
-    const pos = p * (layers.length - 1);
-    layers.forEach((el,i)=>{
-      const d = Math.abs(pos - i);
-      el.style.opacity = d < 1 ? (1 - d).toFixed(3) : 0;
-    });
+    strip.style.transform = `translateY(${-(p * (frames.length - 1) * win).toFixed(1)}px)`;
   }
   window.addEventListener("scroll",()=>{
     if(!ticking){ ticking = true; requestAnimationFrame(paint); }
