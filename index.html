@@ -1265,8 +1265,9 @@ function initNavMedia(){
   const box = document.getElementById("nav-media");
   if(!box) return;
 
-  /* the cover, then one frame per creative territory, in deck order */
-  const frames = ["hero-cover", ...SHOTS.map(s=>s.src)];
+  /* one frame per creative territory, in deck order. The cover is deliberately
+     not in the strip: it is already the image at the top of the page. */
+  const frames = SHOTS.map(s=>s.src);
   const strip = document.createElement("div");
   strip.className = "nav-strip";
   frames.forEach(name=>{
