@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
-<title>MAD × LUMEN — From Vision to Market</title>
+<title>LUMEN × MAD — From Vision to Market</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%230d0d0d'/><text y='72' x='50' font-size='64' font-family='Helvetica,Arial' font-weight='bold' fill='%23fff' text-anchor='middle'>M</text></svg>">
 <style>
 :root{
@@ -104,9 +104,9 @@ section{padding:clamp(64px,9vh,110px) var(--pad);border-bottom:1px solid var(--g
 @media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}}
 
 /* ─── HERO ─────────────────────────────────────────── */
-#hero{padding:0;border-bottom:none;min-height:100vh;display:flex;flex-direction:column}
-.hero-img{flex:1;min-height:52vh;overflow:hidden;background:var(--grey-10);position:relative}
-.hero-img img{width:100%;height:100%;object-fit:cover;transform:scale(1.04)}
+#hero{padding:0;border-bottom:none;display:flex;flex-direction:column}
+.hero-img{background:var(--grey-10);position:relative}
+.hero-img img{width:100%;height:auto}
 .hero-copy{padding:clamp(32px,5vw,60px) var(--pad) clamp(48px,7vw,80px)}
 .hero-lockup{display:flex;align-items:center;gap:22px;margin-bottom:26px;flex-wrap:wrap}
 .hero-lockup img{height:clamp(44px,6vw,72px);width:auto}
@@ -174,9 +174,9 @@ section{padding:clamp(64px,9vh,110px) var(--pad);border-bottom:1px solid var(--g
 .terr-head h3{font-size:clamp(20px,3vw,34px);margin-bottom:8px}
 .terr-head p{font-size:15px;color:var(--grey-60)}
 .gal{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:clamp(12px,1.6vw,22px)}
-.shot{position:relative;cursor:zoom-in;overflow:hidden;background:var(--grey-10)}
-.shot img{width:100%;aspect-ratio:3/2;object-fit:cover;transition:transform .7s var(--ease)}
-.shot:hover img{transform:scale(1.045)}
+.shot{position:relative;cursor:zoom-in;background:var(--grey-10)}
+.shot img{width:100%;height:auto;transition:opacity .4s var(--ease)}
+.shot:hover img{opacity:.86}
 .shot figcaption{
   padding:14px 2px 0;font-size:13px;color:var(--grey-60);
   display:flex;justify-content:space-between;gap:12px;align-items:baseline
@@ -237,6 +237,50 @@ section{padding:clamp(64px,9vh,110px) var(--pad);border-bottom:1px solid var(--g
 .org-cell .who{font-size:15px;font-weight:700;margin-bottom:10px}
 .org-cell p{font-size:14px;color:var(--grey-60);line-height:1.6}
 .org-caption{margin-top:32px;font-size:15px;color:var(--grey-60);text-align:center;max-width:70ch;margin-inline:auto}
+
+/* ─── BIO MODAL ────────────────────────────────────── */
+.org-cell.clickable{cursor:pointer;position:relative}
+.org-cell.clickable::after{
+  content:"Bio +";position:absolute;left:50%;transform:translateX(-50%);bottom:14px;
+  font-size:9px;letter-spacing:.18em;font-weight:700;text-transform:uppercase;
+  color:var(--grey-45);transition:color .25s var(--ease)
+}
+.org-cell.clickable{padding-bottom:clamp(40px,4vw,50px)}
+.org-cell.clickable:hover::after{color:var(--accent)}
+
+#bio{
+  position:fixed;inset:0;z-index:190;background:rgba(13,13,13,.55);
+  display:none;align-items:center;justify-content:center;padding:clamp(16px,4vw,48px)
+}
+#bio.on{display:flex}
+.bio-panel{
+  background:var(--paper);max-width:680px;width:100%;max-height:88vh;overflow-y:auto;
+  padding:clamp(28px,4vw,52px);position:relative
+}
+.bio-panel .eyebrow{margin-bottom:14px}
+.bio-panel h3{font-size:clamp(24px,3.6vw,38px);line-height:1.05;margin-bottom:8px}
+.bio-role{font-size:13px;letter-spacing:.12em;font-weight:700;text-transform:uppercase;color:var(--accent);margin-bottom:6px}
+.bio-org{font-size:14px;color:var(--grey-60);margin-bottom:26px;padding-bottom:22px;border-bottom:1px solid var(--grey-20)}
+.bio-body p{font-size:15px;line-height:1.68;color:var(--grey-60);margin-bottom:16px}
+.bio-body p:last-child{margin-bottom:0}
+.bio-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:26px;padding-top:22px;border-top:1px solid var(--grey-20)}
+.bio-tag{
+  padding:7px 13px;border:1px solid var(--grey-20);font-size:10px;letter-spacing:.12em;
+  font-weight:700;text-transform:uppercase;color:var(--grey-60)
+}
+.bio-links{margin-top:26px}
+.bio-li{
+  display:inline-flex;align-items:center;gap:10px;padding:13px 20px;background:var(--ink);color:var(--paper);
+  font-size:10px;letter-spacing:.16em;font-weight:700;text-transform:uppercase;text-decoration:none;
+  transition:background .25s var(--ease)
+}
+.bio-li:hover{background:var(--accent)}
+.bio-close{
+  position:absolute;top:clamp(14px,2vw,22px);right:clamp(14px,2vw,22px);
+  width:38px;height:38px;display:flex;align-items:center;justify-content:center;
+  font-size:22px;color:var(--grey-45);transition:color .25s
+}
+.bio-close:hover{color:var(--ink)}
 
 /* ─── JOURNEY ──────────────────────────────────────── */
 .phase-switch{display:flex;gap:8px;margin-bottom:30px;flex-wrap:wrap}
@@ -329,7 +373,6 @@ footer .f-r{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:v
 @media (max-width:560px){
   .refgrid,.steps,.org-row{grid-template-columns:1fr}
   .gal{grid-template-columns:1fr}
-  .hero-img{min-height:38vh}
 }
 @media print{
   nav#chapters,.nav-toggle,#progress,#gate,#lb,.filters,.phase-switch{display:none!important}
@@ -346,7 +389,7 @@ footer .f-r{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:v
 <!-- ══ GATE ══ -->
 <div id="gate">
   <div class="gate-box">
-    <div class="gate-mark">MAD × LUMEN</div>
+    <div class="gate-mark">LUMEN × MAD</div>
     <h1>From Vision<br>to Market</h1>
     <p class="sub">An integrated brand development &amp; execution journey. This document is private.</p>
     <form class="gate-field" id="gate-form">
@@ -366,7 +409,7 @@ footer .f-r{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:v
 <nav id="chapters">
   <div class="nav-brand">
     <img src="assets/img/logo-lumen.png" alt="LUMEN" class="logo">
-    <div class="pair">MAD × LUMEN</div>
+    <div class="pair">LUMEN × MAD</div>
   </div>
   <div class="nav-list" id="nav-list"></div>
   <div class="nav-foot">Brand development<br>&amp; execution</div>
@@ -396,7 +439,7 @@ footer .f-r{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:v
   <!-- 01 VISION -->
   <section id="vision" data-nav="The vision">
     <div class="reveal">
-      <div class="eyebrow">MAD × LUMEN</div>
+      <div class="eyebrow">LUMEN × MAD</div>
       <h2 class="sec-title">Your vision,<br>our starting point</h2>
       <p class="sec-sub">A founder-led women's ready-to-wear brand, with a clear creative point of view</p>
       <div class="rule"></div>
@@ -492,7 +535,7 @@ footer .f-r{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:v
   <!-- 05 CAPABILITIES -->
   <section id="capabilities" data-nav="Capabilities">
     <div class="reveal">
-      <div class="eyebrow">MAD × LUMEN</div>
+      <div class="eyebrow">LUMEN × MAD</div>
       <h2 class="sec-title">Expanded capabilities</h2>
       <p class="sec-sub">A stronger senior team, with creative and digital delivery integrated into the LUMEN offer through White Rabbit Hole</p>
       <div class="rule"></div>
@@ -532,7 +575,7 @@ footer .f-r{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:v
   <!-- 06 TEAM -->
   <section id="team" data-nav="The team">
     <div class="reveal">
-      <div class="eyebrow">MAD × LUMEN</div>
+      <div class="eyebrow">LUMEN × MAD</div>
       <h2 class="sec-title">Your senior team</h2>
       <p class="sec-sub">A close working relationship, with Madawi's creative ownership at the centre</p>
       <div class="rule"></div>
@@ -545,15 +588,15 @@ footer .f-r{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:v
       <div class="org-stem"></div>
       <div class="org-bar"><div class="mid"></div></div>
       <div class="org-row">
-        <div class="org-cell">
+        <div class="org-cell clickable" data-bio="aissata" role="button" tabindex="0">
           <h4>Strategy &amp; product</h4>
-          <div class="who">Aïssata / Lead consultant</div>
-          <p>Business, collection and product direction<br>Operational co-pilot</p>
+          <div class="who">Aïssata Malhaire</div>
+          <p>Lead consultant, LUMEN<br>Business, collection and product direction</p>
         </div>
-        <div class="org-cell is-wrh">
+        <div class="org-cell is-wrh clickable" data-bio="alberto" role="button" tabindex="0">
           <h4>Creative &amp; digital</h4>
-          <div class="who">White Rabbit Hole</div>
-          <p>Brand expression, content and digital<br>AI-assisted creative workflows</p>
+          <div class="who">Alberto Maccari</div>
+          <p>Creative Director, White Rabbit Hole<br>Brand expression, content and digital</p>
         </div>
         <div class="org-cell">
           <h4>Technical &amp; production</h4>
@@ -568,7 +611,7 @@ footer .f-r{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:v
   <!-- 07 JOURNEY -->
   <section id="journey" data-nav="The journey">
     <div class="reveal">
-      <div class="eyebrow">MAD × LUMEN</div>
+      <div class="eyebrow">LUMEN × MAD</div>
       <h2 class="sec-title">The MAD development journey</h2>
       <p class="sec-sub">Two connected phases, with creative, product and digital work progressing in parallel. Select any step to open its detail.</p>
       <div class="rule"></div>
@@ -585,7 +628,7 @@ footer .f-r{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:v
   <!-- 08 PIECE -->
   <section id="piece" data-nav="One MAD piece">
     <div class="reveal">
-      <div class="eyebrow">MAD × LUMEN</div>
+      <div class="eyebrow">LUMEN × MAD</div>
       <h2 class="sec-title">One MAD piece,<br>through the process</h2>
       <p class="sec-sub">A proposed working sequence, applied to a selected style from Madawi's own collection</p>
       <div class="rule"></div>
@@ -600,7 +643,7 @@ footer .f-r{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:v
   <!-- 09 CLOSE -->
   <section id="launch" data-nav="Ready for launch">
     <div class="reveal">
-      <div class="eyebrow">MAD × LUMEN</div>
+      <div class="eyebrow">LUMEN × MAD</div>
       <h2 class="sec-title">Ready for launch,<br>built for what follows</h2>
       <p class="sec-sub">A coordinated first launch, followed by learning, focused drops and progressive development</p>
       <div class="rule"></div>
@@ -634,12 +677,26 @@ footer .f-r{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:v
   </section>
 
   <footer>
-    <div class="f-l">MAD × LUMEN<br>Brand development &amp; execution</div>
+    <div class="f-l">LUMEN × MAD<br>Brand development &amp; execution</div>
     <div class="f-r">Creative &amp; digital delivery<br>by White Rabbit Hole</div>
   </footer>
   <p class="disclaimer">All garment visuals in this document are AI-generated creative explorations produced to support discussion. They are not photographs of finished product. Final designs, materials and construction follow Madawi's creative choices and technical validation.</p>
 
 </main>
+</div>
+
+<!-- ══ BIO ══ -->
+<div id="bio" role="dialog" aria-modal="true" aria-label="Biography">
+  <div class="bio-panel">
+    <button class="bio-close" id="bio-close" aria-label="Close">×</button>
+    <div class="eyebrow" id="bio-eyebrow"></div>
+    <h3 id="bio-name"></h3>
+    <div class="bio-role" id="bio-role"></div>
+    <div class="bio-org" id="bio-org"></div>
+    <div class="bio-body" id="bio-body"></div>
+    <div class="bio-tags" id="bio-tags"></div>
+    <div class="bio-links" id="bio-links"></div>
+  </div>
 </div>
 
 <!-- ══ LIGHTBOX ══ -->
@@ -665,9 +722,9 @@ footer .f-r{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:v
    To change the code: run in a terminal
      printf '%s' 'YOURCODE' | shasum -a 256
    and paste the result into CODE_HASH below.
-   Current CODE_HASH corresponds to: MAD2026            */
-const REQUIRE_CODE = false;
-const CODE_HASH = "1b61ccf384b0f9be07fb17769ff4e1dbab93796f2a72f0fc65b1f700a383c395";
+   Current CODE_HASH corresponds to: MAD26            */
+const REQUIRE_CODE = true;
+const CODE_HASH = "ce6a954839944718f1430e6871f9b3c59ec82cbe30bc94f284d99f49d3d5d8d6";
 const KEY = "mad-lumen-access";
 
 const gate  = document.getElementById("gate");
@@ -792,6 +849,37 @@ const STEPS = [
         {h:"Building autonomy",wrh:true,items:["Targeted AI workshops and brand templates","Support for selected day-to-day content tasks","Explore accessories and selected components","3D printing for form studies and prototypes, subject to validation"]}]}
 ];
 
+/* Team biographies.
+   linkedin: "" hides the button for that person. */
+const BIOS = {
+  aissata:{
+    eyebrow:"Strategy & product",
+    name:"Aïssata Malhaire",
+    role:"Lead consultant",
+    org:"LUMEN — strategy, product, sourcing and production",
+    linkedin:"https://www.linkedin.com/in/aissata-malhaire/",
+    tags:["Brand & business strategy","Collection architecture","Sourcing & production","Market access"],
+    body:[
+      "Aïssata leads LUMEN, the strategic and operational core of the MAD partnership. Her work covers the full arc a fashion brand has to cross in order to exist commercially: positioning and business model, collection architecture and product direction, development and sourcing, production and operations, then market access and growth.",
+      "On MAD she works as lead consultant and operational co-pilot — translating Madawi's creative vision into a focused, commercially grounded first offer, setting the price architecture and target costing, and coordinating the technical partners and suppliers who make the collection manufacturable.",
+      "Alongside brand work, she supports businesses and institutions — manufacturers, federations, incubators and schools — accompanying emerging labels through the same sequence, from first collection to market."
+    ]
+  },
+  alberto:{
+    eyebrow:"Creative & digital",
+    name:"Alberto Maccari",
+    role:"Creative Director",
+    org:"White Rabbit Hole — AI-driven creative studio, Brussels",
+    linkedin:"",
+    tags:["Creative direction","Brand identity","Advertising","AI-assisted content","Digital & e-commerce"],
+    body:[
+      "Alberto is Creative Director of White Rabbit Hole, the Brussels studio behind MAD's brand expression, content and digital experience. His background sits where advertising meets fashion: brand identity, art direction and campaign work built on the craft side of image-making — photography, styling, composition and the discipline of holding a visual system together across every touchpoint.",
+      "What he brings to MAD is that craft extended by new technology. White Rabbit Hole builds AI-assisted creative and product workflows: visual research and the comparison of creative directions, campaign concepting, content variations across channels, and product imagery built around accurate references of the approved garments. The tools accelerate exploration and production — the creative decisions stay with Madawi.",
+      "The same thinking runs through the digital side: e-commerce structure and design, product page storytelling, packaging and launch assets, all prepared around one set of brand decisions rather than assembled from separate handovers. He also runs targeted AI workshops, so the team keeps the capability in-house after launch."
+    ]
+  }
+};
+
 const FLOW = [
  {n:"01",t:"Founder input",     p:"Sketch, references and design intention",       o:"A clear product brief"},
  {n:"02",t:"Product translation",p:"Flat views, materials and construction notes", o:"A reviewed technical dossier"},
@@ -804,7 +892,7 @@ let built = false;
 function build(){
   if(built) return; built = true;
   buildNav(); buildRefs(); buildTerritories(); buildJourney(); buildFlow();
-  initReveal(); initVisionWords(); initLightbox(); initProgress(); initKeys(); initNavToggle();
+  initReveal(); initVisionWords(); initLightbox(); initBio(); initProgress(); initKeys(); initNavToggle();
 }
 
 /* --- nav --- */
@@ -1011,6 +1099,37 @@ function initLightbox(){
   window.__lb = {step,close,isOpen:()=>lb.classList.contains("on")};
 }
 
+/* --- bio --- */
+function initBio(){
+  const modal = document.getElementById("bio");
+  const panel = modal.querySelector(".bio-panel");
+  function open(key){
+    const b = BIOS[key]; if(!b) return;
+    document.getElementById("bio-eyebrow").textContent = b.eyebrow;
+    document.getElementById("bio-name").textContent    = b.name;
+    document.getElementById("bio-role").textContent    = b.role;
+    document.getElementById("bio-org").textContent     = b.org;
+    document.getElementById("bio-body").innerHTML  = b.body.map(p=>`<p>${p}</p>`).join("");
+    document.getElementById("bio-tags").innerHTML  = b.tags.map(t=>`<span class="bio-tag">${t}</span>`).join("");
+    document.getElementById("bio-links").innerHTML = b.linkedin
+      ? `<a class="bio-li" href="${b.linkedin}" target="_blank" rel="noopener noreferrer">LinkedIn ↗</a>` : "";
+    modal.classList.add("on");
+    panel.scrollTop = 0;
+    document.getElementById("bio-close").focus();
+  }
+  function close(){ modal.classList.remove("on"); }
+
+  document.querySelectorAll("[data-bio]").forEach(cell=>{
+    cell.addEventListener("click",()=>open(cell.dataset.bio));
+    cell.addEventListener("keydown",e=>{
+      if(e.key==="Enter"||e.key===" "){ e.preventDefault(); open(cell.dataset.bio); }
+    });
+  });
+  document.getElementById("bio-close").addEventListener("click",close);
+  modal.addEventListener("click",e=>{ if(e.target===modal) close(); });
+  window.__bio = {close,isOpen:()=>modal.classList.contains("on")};
+}
+
 /* --- progress --- */
 function initProgress(){
   const bar = document.getElementById("progress");
@@ -1031,6 +1150,7 @@ function initKeys(){
       if(e.key==="ArrowLeft") window.__lb.step(-1);
       return;
     }
+    if(window.__bio?.isOpen()){ if(e.key==="Escape") window.__bio.close(); return; }
     if(e.target.tagName==="INPUT") return;
     if(e.key!=="ArrowRight" && e.key!=="ArrowLeft") return;
     e.preventDefault();

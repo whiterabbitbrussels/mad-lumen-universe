@@ -1,6 +1,6 @@
-# MAD × LUMEN — From Vision to Market
+# LUMEN × MAD — From Vision to Market
 
-Interactive version of the MAD × LUMEN brand development & execution deck
+Interactive version of the LUMEN × MAD brand development & execution deck
 (*MAD_LUMEN_Creative_Universe_v2*), built as a single self-contained page.
 
 **Client:** MAD — founder-led women's ready-to-wear brand (Madawi), Saudi Arabia / GCC
@@ -46,7 +46,7 @@ To change the code, generate a new hash and paste it into `CODE_HASH`:
 printf '%s' 'YOURCODE' | shasum -a 256
 ```
 
-The current hash corresponds to `MAD2026`. This is a light client-side gate — it keeps
+The current hash corresponds to `MAD26`. This is a light client-side gate — it keeps
 the page out of casual reach, it is not a security boundary.
 
 ## Assets
