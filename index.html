@@ -94,6 +94,14 @@ nav#chapters{
 .nav-item.active::before{
   content:"";position:absolute;left:0;top:8px;bottom:8px;width:3px;background:var(--accent)
 }
+/* a swatch of the collection's floral print closing the sidebar,
+   faded into the paper so it reads as a texture rather than a photo */
+.nav-floral{
+  flex:none;height:clamp(120px,20vh,210px);margin:0 0 20px;
+  background:url("assets/img/nav-floral.webp") center 30%/cover no-repeat;
+  -webkit-mask-image:linear-gradient(to bottom,transparent,#000 42%,#000 100%);
+          mask-image:linear-gradient(to bottom,transparent,#000 42%,#000 100%);
+}
 .nav-foot{padding:20px 28px 0;border-top:1px solid var(--grey-20);font-size:10px;letter-spacing:.12em;color:var(--grey-45);text-transform:uppercase;line-height:1.7}
 .nav-toggle{display:none}
 
@@ -225,10 +233,7 @@ section{padding:clamp(64px,9vh,110px) var(--pad);border-bottom:1px solid var(--g
 .col h3{font-size:14px;letter-spacing:.13em;margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid var(--grey-20)}
 .col ul{list-style:none;margin:0;padding:0}
 .col li{
-  font-size:clamp(15px,1.7vw,18px);line-height:1.45;padding:12px 0 12px 26px;position:relative;color:var(--grey-60)
-}
-.col li::before{
-  content:"";position:absolute;left:0;top:20px;width:11px;height:1px;background:var(--accent)
+  font-size:clamp(15px,1.7vw,18px);line-height:1.45;padding:12px 0;position:relative;color:var(--grey-60)
 }
 .col li strong{color:var(--ink);font-weight:700}
 
@@ -289,7 +294,9 @@ section{padding:clamp(64px,9vh,110px) var(--pad);border-bottom:1px solid var(--g
   width:clamp(84px,11vw,116px);aspect-ratio:1;flex:none;background:var(--grey-10);
   overflow:hidden;position:relative
 }
-.bio-portrait img{width:100%;height:100%;object-fit:cover}
+/* the photo paints over the monogram; if it fails to load it is removed
+   and the initials show through */
+.bio-portrait img{position:relative;z-index:1;width:100%;height:100%;object-fit:cover}
 .bio-portrait .initials{
   position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
   font-size:clamp(24px,3vw,32px);font-weight:700;color:var(--grey-45);letter-spacing:-.02em
@@ -342,8 +349,7 @@ section{padding:clamp(64px,9vh,110px) var(--pad);border-bottom:1px solid var(--g
 .detail>p.lead{font-size:16px;color:var(--grey-60);margin-bottom:28px;max-width:70ch}
 .detail .duo{gap:clamp(24px,3.4vw,52px)}
 .detail .col h3{font-size:12px;border-color:var(--grey-20)}
-.detail .col li{font-size:15px;padding:9px 0 9px 24px}
-.detail .col li::before{top:17px}
+.detail .col li{font-size:15px;padding:9px 0}
 .outputs{margin-top:28px;padding-top:20px;border-top:1px solid var(--grey-20);display:flex;gap:14px;flex-wrap:wrap;align-items:baseline}
 .outputs .lbl{font-size:10px;letter-spacing:.18em;font-weight:700;color:var(--grey-45);text-transform:uppercase}
 .outputs .val{font-size:15px;font-weight:700}
@@ -468,6 +474,7 @@ footer .f-r{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:v
     <div class="pair">LUMEN × MAD</div>
   </div>
   <div class="nav-list" id="nav-list"></div>
+  <div class="nav-floral" aria-hidden="true"></div>
   <div class="nav-foot">Brand development<br>&amp; execution</div>
 </nav>
 
@@ -949,12 +956,12 @@ const BIOS = {
     role:"Creative Director",
     org:"White Rabbit Hole — AI-driven creative studio, Brussels",
     photo:"portrait-alberto.jpg",
-    linkedin:"",
-    tags:["Creative direction","Brand identity","Advertising","AI-assisted content","Digital & e-commerce"],
+    linkedin:"https://www.linkedin.com/in/albertomaccari/",
+    tags:["Fashion communication","Creative direction","Advertising","Brand identity","AI-assisted content"],
     body:[
-      "Alberto is Creative Director of White Rabbit Hole, the Brussels studio behind MAD's brand expression, content and digital experience. His background sits where advertising meets fashion: brand identity, art direction and campaign work built on the craft side of image-making — photography, styling, composition and the discipline of holding a visual system together across every touchpoint.",
-      "What he brings to MAD is that craft extended by new technology. White Rabbit Hole builds AI-assisted creative and product workflows: visual research and the comparison of creative directions, campaign concepting, content variations across channels, and product imagery built around accurate references of the approved garments. The tools accelerate exploration and production — the creative decisions stay with Madawi.",
-      "The same thinking runs through the digital side: e-commerce structure and design, product page storytelling, packaging and launch assets, all prepared around one set of brand decisions rather than assembled from separate handovers. He also runs targeted AI workshops, so the team keeps the capability in-house after launch."
+      "Fashion communication is where Alberto comes from. Across more than twenty years shaping brand narratives in Europe, he has built campaigns, brand books and editorial imagery for fashion and lifestyle names — his work for <strong>Triumph</strong> won a Fedrigoni Award in 2013 — and he has stayed close to the craft of the image through his own photographic practice, including the <em>Girls of Milan</em> photobook. Styling, casting, light and composition: the things that decide whether a collection reads as desirable or merely well made.",
+      "That grounding became creative direction on the agency side: identity systems, art direction and campaign work across Europe, always with the same concern — holding one visual idea together across a lookbook, a shop window, a product page and a feed.",
+      "Today he leads White Rabbit Hole, the Brussels studio behind MAD's brand expression, content and digital experience, where that craft is extended by new technology. The studio builds AI-assisted creative and product workflows: visual research and the comparison of directions, campaign concepting, content variations across channels, and product imagery built around accurate references of the approved garments. The tools accelerate exploration; the creative decisions stay with Madawi. He also runs targeted AI workshops, so the team keeps the capability in-house after launch."
     ]
   }
 };
