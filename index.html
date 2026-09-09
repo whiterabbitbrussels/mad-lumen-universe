@@ -94,10 +94,20 @@ nav#chapters{
 .nav-item.active::before{
   content:"";position:absolute;left:0;top:8px;bottom:8px;width:3px;background:var(--accent)
 }
-/* the cover image closing the sidebar */
+/* Collection images closing the sidebar. They cross-fade continuously as the
+   page scrolls — opacity is driven from scroll position, not from a timer, so
+   the sequence tracks the wheel in both directions. */
 .nav-floral{
   flex:none;height:clamp(130px,22vh,230px);margin:0 0 20px;
-  background:url("assets/img/hero-cover.webp") 62% center/cover no-repeat;
+  position:relative;overflow:hidden;background:var(--grey-10)
+}
+.nav-floral span{
+  position:absolute;inset:0;background-size:cover;background-position:center;
+  opacity:0;will-change:opacity
+}
+@media (prefers-reduced-motion:reduce){
+  /* no cross-fading: the first frame simply stays */
+  .nav-floral span{transition:none}
 }
 .nav-foot{padding:20px 28px 0;border-top:1px solid var(--grey-20);font-size:10px;letter-spacing:.12em;color:var(--grey-45);text-transform:uppercase;line-height:1.7}
 .nav-toggle{display:none}
@@ -471,7 +481,7 @@ footer .f-r{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:v
     <div class="pair">LUMEN × MAD</div>
   </div>
   <div class="nav-list" id="nav-list"></div>
-  <div class="nav-floral" aria-hidden="true"></div>
+  <div class="nav-floral" id="nav-media" aria-hidden="true"></div>
   <div class="nav-foot">Brand development<br>&amp; execution</div>
 </nav>
 
@@ -975,7 +985,7 @@ let built = false;
 function build(){
   if(built) return; built = true;
   buildNav(); buildRefs(); buildTerritories(); buildJourney(); buildFlow();
-  initReveal(); initVisionWords(); initLightbox(); initBio(); initVideo("hero-video"); initProgress(); initKeys(); initNavToggle();
+  initReveal(); initVisionWords(); initLightbox(); initBio(); initVideo("hero-video"); initNavMedia(); initProgress(); initKeys(); initNavToggle();
 }
 
 /* --- nav --- */
@@ -1246,6 +1256,44 @@ function initBio(){
   document.getElementById("bio-close").addEventListener("click",close);
   modal.addEventListener("click",e=>{ if(e.target===modal) close(); });
   window.__bio = {close,isOpen:()=>modal.classList.contains("on")};
+}
+
+/* --- sidebar scroll-driven slideshow --- */
+function initNavMedia(){
+  const box = document.getElementById("nav-media");
+  if(!box) return;
+
+  /* the cover, then one frame per creative territory, in deck order */
+  const frames = ["hero-cover", ...SHOTS.map(s=>s.src)];
+  const layers = frames.map(name=>{
+    const el = document.createElement("span");
+    el.style.backgroundImage = `url("assets/img/${name}.webp")`;
+    box.appendChild(el);
+    return el;
+  });
+  layers[0].style.opacity = 1;
+
+  const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if(reduced) return;
+
+  let ticking = false;
+  function paint(){
+    ticking = false;
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+    const p = max > 0 ? Math.min(Math.max(window.scrollY / max, 0), 1) : 0;
+    /* position along the sequence; neighbouring frames overlap, so the
+       hand-off is a genuine cross-fade rather than a swap */
+    const pos = p * (layers.length - 1);
+    layers.forEach((el,i)=>{
+      const d = Math.abs(pos - i);
+      el.style.opacity = d < 1 ? (1 - d).toFixed(3) : 0;
+    });
+  }
+  window.addEventListener("scroll",()=>{
+    if(!ticking){ ticking = true; requestAnimationFrame(paint); }
+  },{passive:true});
+  window.addEventListener("resize",paint);
+  paint();
 }
 
 /* --- progress --- */
