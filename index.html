@@ -177,8 +177,8 @@ section{padding:clamp(64px,9vh,110px) var(--pad);border-bottom:1px solid var(--g
    whatever the number of shots. Single-image territories go full width. */
 .gal{display:grid;grid-template-columns:repeat(2,1fr);gap:clamp(12px,1.6vw,22px)}
 .gal.single{grid-template-columns:1fr}
-.shot{position:relative;cursor:zoom-in;background:var(--grey-10)}
-.shot img{width:100%;height:auto;transition:opacity .4s var(--ease)}
+.shot{position:relative;cursor:zoom-in}
+.shot img{width:100%;height:auto;background:var(--grey-10);transition:opacity .4s var(--ease)}
 .shot:hover img{opacity:.86}
 .shot figcaption{
   padding:14px 2px 0;font-size:13px;color:var(--grey-60);
@@ -270,10 +270,21 @@ section{padding:clamp(64px,9vh,110px) var(--pad);border-bottom:1px solid var(--g
   background:var(--paper);max-width:680px;width:100%;max-height:88vh;overflow-y:auto;
   padding:clamp(28px,4vw,52px);position:relative
 }
+.bio-head{display:flex;gap:clamp(18px,2.6vw,28px);align-items:flex-start;margin-bottom:26px;padding-bottom:22px;border-bottom:1px solid var(--grey-20)}
+.bio-portrait{
+  width:clamp(84px,11vw,116px);aspect-ratio:1;flex:none;background:var(--grey-10);
+  overflow:hidden;position:relative
+}
+.bio-portrait img{width:100%;height:100%;object-fit:cover}
+.bio-portrait .initials{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  font-size:clamp(24px,3vw,32px);font-weight:700;color:var(--grey-45);letter-spacing:-.02em
+}
+.bio-headtext{flex:1;min-width:0;padding-top:2px}
 .bio-panel .eyebrow{margin-bottom:14px}
 .bio-panel h3{font-size:clamp(24px,3.6vw,38px);line-height:1.05;margin-bottom:8px}
 .bio-role{font-size:13px;letter-spacing:.12em;font-weight:700;text-transform:uppercase;color:var(--accent);margin-bottom:6px}
-.bio-org{font-size:14px;color:var(--grey-60);margin-bottom:26px;padding-bottom:22px;border-bottom:1px solid var(--grey-20)}
+.bio-org{font-size:14px;color:var(--grey-60);line-height:1.5}
 .bio-body p{font-size:15px;line-height:1.68;color:var(--grey-60);margin-bottom:16px}
 .bio-body p:last-child{margin-bottom:0}
 .bio-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:26px;padding-top:22px;border-top:1px solid var(--grey-20)}
@@ -702,10 +713,15 @@ footer .f-r{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:v
 <div id="bio" role="dialog" aria-modal="true" aria-label="Biography">
   <div class="bio-panel">
     <button class="bio-close" id="bio-close" aria-label="Close">×</button>
-    <div class="eyebrow" id="bio-eyebrow"></div>
-    <h3 id="bio-name"></h3>
-    <div class="bio-role" id="bio-role"></div>
-    <div class="bio-org" id="bio-org"></div>
+    <div class="bio-head">
+      <div class="bio-portrait" id="bio-portrait"></div>
+      <div class="bio-headtext">
+        <div class="eyebrow" id="bio-eyebrow"></div>
+        <h3 id="bio-name"></h3>
+        <div class="bio-role" id="bio-role"></div>
+        <div class="bio-org" id="bio-org"></div>
+      </div>
+    </div>
     <div class="bio-body" id="bio-body"></div>
     <div class="bio-tags" id="bio-tags"></div>
     <div class="bio-links" id="bio-links"></div>
@@ -867,13 +883,15 @@ const STEPS = [
 ];
 
 /* Team biographies.
-   linkedin: "" hides the button for that person. */
+   photo:    filename in assets/img/ — "" falls back to initials
+   linkedin: "" hides the LinkedIn button for that person */
 const BIOS = {
   aissata:{
     eyebrow:"Strategy & product",
     name:"Aïssata Malhaire",
     role:"Lead consultant",
     org:"LUMEN — strategy, product, sourcing and production",
+    photo:"portrait-aissata.jpg",
     linkedin:"https://www.linkedin.com/in/aissata-malhaire/",
     tags:["Brand & business strategy","Collection architecture","Sourcing & production","Market access"],
     body:[
@@ -887,6 +905,7 @@ const BIOS = {
     name:"Alberto Maccari",
     role:"Creative Director",
     org:"White Rabbit Hole — AI-driven creative studio, Brussels",
+    photo:"portrait-alberto.jpg",
     linkedin:"",
     tags:["Creative direction","Brand identity","Advertising","AI-assisted content","Digital & e-commerce"],
     body:[
@@ -1123,6 +1142,12 @@ function initBio(){
   const panel = modal.querySelector(".bio-panel");
   function open(key){
     const b = BIOS[key]; if(!b) return;
+    const initials = b.name.split(/\s+/).map(w=>w[0]).join("").slice(0,2).toUpperCase();
+    /* the <img> sits on top of the initials and hides itself if the file
+       is missing, so the panel degrades cleanly to a monogram */
+    document.getElementById("bio-portrait").innerHTML =
+      `<span class="initials">${initials}</span>` +
+      (b.photo ? `<img src="assets/img/${b.photo}" alt="${b.name}" onerror="this.remove()">` : "");
     document.getElementById("bio-eyebrow").textContent = b.eyebrow;
     document.getElementById("bio-name").textContent    = b.name;
     document.getElementById("bio-role").textContent    = b.role;
