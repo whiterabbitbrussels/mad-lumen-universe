@@ -173,7 +173,10 @@ section{padding:clamp(64px,9vh,110px) var(--pad);border-bottom:1px solid var(--g
 .terr-head{margin-bottom:22px}
 .terr-head h3{font-size:clamp(20px,3vw,34px);margin-bottom:8px}
 .terr-head p{font-size:15px;color:var(--grey-60)}
-.gal{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:clamp(12px,1.6vw,22px)}
+/* fixed 2-up grid: every territory renders its images at the same size,
+   whatever the number of shots. Single-image territories go full width. */
+.gal{display:grid;grid-template-columns:repeat(2,1fr);gap:clamp(12px,1.6vw,22px)}
+.gal.single{grid-template-columns:1fr}
 .shot{position:relative;cursor:zoom-in;background:var(--grey-10)}
 .shot img{width:100%;height:auto;transition:opacity .4s var(--ease)}
 .shot:hover img{opacity:.86}
@@ -188,6 +191,16 @@ section{padding:clamp(64px,9vh,110px) var(--pad);border-bottom:1px solid var(--g
 }
 .shot:hover .zoom{opacity:1;transform:none}
 .terr.hide{display:none}
+
+/* quiet inline caveat — used for the AI-generated disclaimer */
+.fineprint{
+  margin-top:36px;padding-top:16px;border-top:1px solid var(--grey-20);
+  font-size:13px;line-height:1.65;color:var(--grey-45);max-width:78ch
+}
+.fineprint span{
+  display:block;font-size:10px;letter-spacing:.18em;font-weight:700;
+  text-transform:uppercase;color:var(--grey-60);margin-bottom:6px
+}
 
 .note{background:var(--ink);color:var(--paper);padding:clamp(22px,2.6vw,32px);margin-top:12px}
 .note h4{font-size:13px;letter-spacing:.14em;margin-bottom:10px}
@@ -496,10 +509,10 @@ footer .f-r{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:v
     </div>
     <div class="filters reveal" id="filters"></div>
     <div id="territories-wrap"></div>
-    <div class="note reveal">
-      <h4>A creative starting point</h4>
-      <p>These explorations are AI-generated and support discussion. Madawi's choices guide the final collection.</p>
-    </div>
+    <p class="fineprint reveal">
+      <span>A creative starting point</span>
+      These explorations are AI-generated and support discussion. Madawi's choices guide the final collection.
+    </p>
   </section>
 
   <!-- 04 COLLECTION -->
@@ -984,7 +997,8 @@ function buildTerritories(){
         <figcaption><span>${s.cap}</span></figcaption>
       </figure>`;
     }).join("");
-    sec.innerHTML = `<div class="terr-head"><h3>${t.title}</h3><p>${t.sub}</p></div><div class="gal">${shots}</div>`;
+    sec.innerHTML = `<div class="terr-head"><h3>${t.title}</h3><p>${t.sub}</p></div>
+      <div class="gal${t.shots.length===1?" single":""}">${shots}</div>`;
     wrap.appendChild(sec);
   });
 }
