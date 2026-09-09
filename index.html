@@ -16,6 +16,9 @@
   --grey-45:#8a8a8a;
   --grey-60:#5e5e5e;
   --accent:#b94a34;
+  /* lifted version of the accent, for small caps sitting on the black blocks
+     where the base tone does not carry enough contrast */
+  --accent-light:#e08063;
   --rule:#0d0d0d;
   --nav-w:264px;
   --pad:clamp(20px,4vw,72px);
@@ -377,6 +380,20 @@ section{padding:clamp(64px,9vh,110px) var(--pad);border-bottom:1px solid var(--g
 .close-grid{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:clamp(28px,4.5vw,72px);align-items:start}
 .close-list{list-style:none;margin:18px 0 0;padding:0}
 .close-list li{font-size:15px;line-height:1.9;color:rgba(255,255,255,.82)}
+
+/* ─── SMALL-CAPS HEADINGS ──────────────────────────
+   The little uppercase labels that title a column or a block, in accent.
+   On the black blocks they switch to the lifted tone. */
+.col h3,
+.fact h3,
+.org-cell h4,
+.flow-item h4,
+.step h4,
+.detail-head .idx{color:var(--accent)}
+
+.note h4,
+.step.active h4,
+.blackcard .foot h4{color:var(--accent-light)}
 
 /* partner links: the logo lockups and the footer credits */
 .hero-lockup a,.nav-brand a{display:inline-flex;transition:opacity .25s var(--ease)}
