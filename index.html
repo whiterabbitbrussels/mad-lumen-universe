@@ -799,7 +799,7 @@ footer .f-r{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:v
     <div class="reveal contact-block">
       <div class="eyebrow">Next step</div>
       <h2 class="sec-title" style="margin-bottom:34px">Let's talk<br>about MAD</h2>
-      <a class="btn solid" href="mailto:contact@lumenfashionconsulting.com?subject=LUMEN%20%C3%97%20MAD%20%E2%80%94%20From%20Vision%20to%20Market">Contact us →</a>
+      <a class="btn solid" onclick="window.__track('contact_click')" href="mailto:contact@lumenfashionconsulting.com?subject=LUMEN%20%C3%97%20MAD%20%E2%80%94%20From%20Vision%20to%20Market">Contact us →</a>
       <a class="contact-mail" href="mailto:contact@lumenfashionconsulting.com">contact@lumenfashionconsulting.com</a>
     </div>
   </section>
@@ -851,8 +851,58 @@ footer .f-r{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:v
 </div>
 
 <script>
+/* ═══ MICROSOFT CLARITY ════════════════════════════
+   Paste the project id from clarity.microsoft.com below to switch tracking on.
+   Left empty, nothing is loaded and no request leaves the page.          */
 (()=>{
 "use strict";
+const CLARITY_ID = "";
+
+if(CLARITY_ID){
+  (function(c,l,a,r,i,t,y){
+    c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+    t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+    y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+  })(window,document,"clarity","script",CLARITY_ID);
+
+  /* Who is reading, if the link carried it: mad.lumenfashionconsulting.com/?u=madawi */
+  const params  = new URLSearchParams(location.search);
+  const visitor = params.get("u") || params.get("utm_recipient") || "anonymous";
+  const source  = params.get("utm_source") || params.get("s") || "";
+
+  const tag = (fn)=>{
+    if(!window.clarity) return false;
+    try{ fn(); }catch(_){}
+    return true;
+  };
+  const base = ()=>tag(()=>{
+    clarity("set","deck","mad-lumen");
+    clarity("set","visitor",visitor);
+    if(source) clarity("set","source",source);
+    if(visitor!=="anonymous") clarity("identify",visitor);
+  });
+  if(!base()){
+    const retry = setInterval(()=>{ if(base()) clearInterval(retry); },500);
+    setTimeout(()=>clearInterval(retry),15000);
+  }
+
+  /* What the reader actually did: how deep they got, and which of the
+     deliberate actions they took. */
+  window.__track = (name,value)=>tag(()=>{
+    clarity("event",name);
+    if(value) clarity("set",name,value);
+  });
+
+  let deepest = "";
+  window.__trackChapter = (id)=>{
+    if(id===deepest) return;
+    deepest = id;
+    tag(()=>clarity("set","deepest_chapter",id));
+  };
+} else {
+  window.__track = ()=>{};
+  window.__trackChapter = ()=>{};
+}
 
 /* ═══ ACCESS ═══════════════════════════════════════
    Set REQUIRE_CODE = true to switch the access gate back on.
@@ -890,7 +940,7 @@ function unlock(){
 form.addEventListener("submit", async e=>{
   e.preventDefault();
   const h = await sha256(input.value.trim());
-  if(h === CODE_HASH){ try{sessionStorage.setItem(KEY,"1")}catch(_){} unlock(); }
+  if(h === CODE_HASH){ try{sessionStorage.setItem(KEY,"1")}catch(_){} window.__track("unlocked"); unlock(); }
   else { err.classList.add("show"); input.value=""; setTimeout(()=>err.classList.remove("show"),2200); }
 });
 /* the initial unlock runs at the very end of this script,
@@ -1059,6 +1109,7 @@ function buildNav(){
     es.forEach(e=>{
       if(e.isIntersecting){
         items.forEach(i=>i.classList.toggle("active", i.dataset.target === e.target.id));
+        window.__trackChapter(e.target.id);
       }
     });
   },{rootMargin:"-45% 0px -50% 0px"});
@@ -1162,6 +1213,7 @@ function renderSteps(){
 function selectStep(i){
   curStep = i;
   const s = STEPS[i];
+  window.__track("journey_step", s.n + " " + s.t);
   document.querySelectorAll("#steps .step").forEach(b=>b.classList.toggle("active", +b.dataset.i===i));
   const cols = s.cols.map(c=>`
     <div class="col">
@@ -1227,6 +1279,7 @@ function initLightbox(){
     const s = SHOTS[i];
     img.src = `assets/img/${s.src}.webp`;
     img.alt = s.cap; cap.textContent = s.cap; ter.textContent = s.terr;
+    window.__track("image_opened", s.terr);
     lb.classList.add("on");
   }
   function step(d){
@@ -1295,6 +1348,7 @@ function initBio(){
     document.getElementById("bio-tags").innerHTML  = b.tags.map(t=>`<span class="bio-tag">${t}</span>`).join("");
     document.getElementById("bio-links").innerHTML = b.linkedin
       ? `<a class="bio-li" href="${b.linkedin}" target="_blank" rel="noopener noreferrer">LinkedIn ↗</a>` : "";
+    window.__track("bio_opened", b.name);
     modal.classList.add("on");
     panel.scrollTop = 0;
     document.getElementById("bio-close").focus();
