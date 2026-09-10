@@ -802,7 +802,7 @@ footer .f-r{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:v
     <div class="reveal contact-block">
       <div class="eyebrow">Next step</div>
       <h2 class="sec-title" style="margin-bottom:34px">Let's talk<br>about MAD</h2>
-      <a class="btn solid" onclick="window.__track('contact_click')" href="mailto:contact@lumenfashionconsulting.com?subject=LUMEN%20%C3%97%20MAD%20%E2%80%94%20From%20Vision%20to%20Market">Contact us →</a>
+      <a class="btn solid" href="mailto:contact@lumenfashionconsulting.com?subject=LUMEN%20%C3%97%20MAD%20%E2%80%94%20From%20Vision%20to%20Market">Contact us →</a>
       <a class="contact-mail" href="mailto:contact@lumenfashionconsulting.com">contact@lumenfashionconsulting.com</a>
     </div>
   </section>
@@ -1092,7 +1092,7 @@ let built = false;
 function build(){
   if(built) return; built = true;
   buildNav(); buildRefs(); buildTerritories(); buildJourney(); buildFlow();
-  initReveal(); initVisionWords(); initLightbox(); initBio(); initVideo("hero-video"); initNavMedia(); initProgress(); initKeys(); initNavToggle();
+  initReveal(); initVisionWords(); initLightbox(); initBio(); initVideo("hero-video"); initNavMedia(); initClickTracking(); initProgress(); initKeys(); initNavToggle();
 }
 
 /* --- nav --- */
@@ -1216,7 +1216,6 @@ function renderSteps(){
 function selectStep(i){
   curStep = i;
   const s = STEPS[i];
-  window.__track("journey_step", s.n + " " + s.t);
   document.querySelectorAll("#steps .step").forEach(b=>b.classList.toggle("active", +b.dataset.i===i));
   const cols = s.cols.map(c=>`
     <div class="col">
@@ -1282,7 +1281,6 @@ function initLightbox(){
     const s = SHOTS[i];
     img.src = `assets/img/${s.src}.webp`;
     img.alt = s.cap; cap.textContent = s.cap; ter.textContent = s.terr;
-    window.__track("image_opened", s.terr);
     lb.classList.add("on");
   }
   function step(d){
@@ -1359,7 +1357,6 @@ function initBio(){
     document.getElementById("bio-tags").innerHTML  = b.tags.map(t=>`<span class="bio-tag">${t}</span>`).join("");
     document.getElementById("bio-links").innerHTML = b.linkedin
       ? `<a class="bio-li" href="${b.linkedin}" target="_blank" rel="noopener noreferrer">LinkedIn ↗</a>` : "";
-    window.__track("bio_opened", b.name);
     modal.classList.add("on");
     panel.scrollTop = 0;
     document.getElementById("bio-close").focus();
@@ -1428,6 +1425,48 @@ function initNavMedia(){
   },{passive:true});
   window.addEventListener("resize",paint);
   paint();
+}
+
+/* --- click tracking ---
+   One delegated listener in capture, so every interactive element is covered
+   without scattering calls through the code. Each click is reported as a
+   readable label rather than a coordinate: Clarity's heatmaps already say
+   where people click, this says what they clicked. */
+function initClickTracking(){
+  const label = (el)=>{
+    let t;
+    if((t = el.closest("[data-bio]")))
+      return ["bio", BIOS[t.dataset.bio]?.name || t.dataset.bio];
+    if((t = el.closest(".shot")))
+      return ["image", SHOTS[+t.dataset.i]?.cap || "?"];
+    if((t = el.closest("#steps .step")))
+      return ["journey_step", t.querySelector(".num").textContent + " " + t.querySelector("h4").textContent];
+    if((t = el.closest("#phase-switch .filter")))
+      return ["journey_phase", "phase " + t.dataset.phase];
+    if((t = el.closest("#filters .filter")))
+      return ["territory_filter", t.textContent.replace(/\d+$/,"").trim()];
+    if((t = el.closest(".ref")))
+      return ["reference", t.querySelector("h3").textContent];
+    if((t = el.closest(".nav-item")))
+      return ["chapter_link", t.textContent.replace(/^\d+/,"").trim()];
+    if((t = el.closest("[data-goto]")))
+      return ["cta", t.textContent.trim()];
+    if((t = el.closest("#lb-next, #lb-prev")))
+      return ["lightbox_nav", t.id === "lb-next" ? "next" : "previous"];
+    if((t = el.closest('a[href^="mailto:"]')))
+      return ["contact", t.getAttribute("href").replace(/^mailto:/,"").split("?")[0]];
+    if((t = el.closest('a[href^="http"]'))){
+      try{ return ["outbound", new URL(t.href).hostname.replace(/^www\./,"")]; }
+      catch(_){ return ["outbound", "link"]; }
+    }
+    if(el.closest("#nav-toggle")) return ["ui", "open index"];
+    return null;
+  };
+
+  document.addEventListener("click",e=>{
+    const found = label(e.target);
+    if(found) window.__track(found[0], found[1]);
+  },true);
 }
 
 /* --- progress --- */
